@@ -1,4 +1,4 @@
-var k = (function(Ink){
+var kk = (function(Ink){
 
     //query selector result class
     var Result = function(resultArray){

@@ -32,18 +32,18 @@
         <div class="large-100 ">
             <h2>Kink code</h2>
 <pre class="prettyprint">
-    k.ready(function(){
+    kk.ready(function(){
 
         //complex selector and mass property setter
-        k('ul#cenas li').style('border:1px solid #CCC');
+        kk('ul#cenas li').style('border:1px solid #CCC');
 
         //context selector using .find()
         // using .hover() to control mouse events
-        k('ul#cenas').find('li').hover(function(){
+        kk('ul#cenas').find('li').hover(function(){
 
             //Chaining methods like a boss
             //.find() .html() .addClass()
-            k(this).find('a').html('hover on the < li >').addClass('blue');
+            kk(this).find('a').html('hover on the < li >').addClass('blue');
         },function(){
 
             //geting data atributte "test"
@@ -57,12 +57,12 @@
         });
 
         //mass selector for a click handler
-        k('li a').click(function(){
+        kk('li a').click(function(){
 
             //node navigation with .parent() and DOM access with .result()
-            var parent = k(this).parent().parent().result(0).id;
+            var parent = kk(this).parent().parent().result(0).id;
 
-            var me = k(this).parent().data().test;
+            var me = kk(this).parent().data().test;
             alert("i`m ("+me+") and a child of ("+parent+") ");
         });
 
@@ -73,37 +73,37 @@
 
     <script type="text/javascript" src="kink.js"></script>
     <script type="text/javascript">
-        k.ready(function(){
+        kk.ready(function(){
 
             //complex selector and mass property setter
-            k('ul#cenas li').style('border:1px solid #CCC');
+            kk('ul#cenas li').style('border:1px solid #CCC');
 
             //context selector using .find()
             // using .hover() to control mouse events
-            k('ul#cenas').find('li').hover(function(){
+            kk('ul#cenas').find('li').hover(function(){
 
                 //Chaining methods like a boss
                 //.find() .html() .addClass()
-                k(this).find('a').html('hover on the <li>').addClass('blue');
+                kk(this).find('a').html('hover on the < li >').addClass('blue');
             },function(){
 
                 //geting data atributte "test"
-                var number = k(this).data().test;
+                var number = kk(this).data().test;
 
                 //no need to chain if you dont want to:
                 //you can also use .childs() instead of .find()
-                var button = k(this).childs()
+                var button = kk(this).childs()
                     button.html('cenas '+number);
                     button.removeClass('blue');
             });
 
             //mass selector for a click handler
-            k('li a').click(function(){
+            kk('li a').click(function(){
 
                 //node navigation with .parent() and DOM access with .result()
-                var parent = k(this).parent().parent().result(0).id;
+                var parent = kk(this).parent().parent().result(0).id;
 
-                var me = k(this).parent().data().test;
+                var me = kk(this).parent().data().test;
                 alert("i`m ("+me+") and a child of ("+parent+") ");
             });
 
