@@ -6,13 +6,13 @@ var k = (function(Ink){
 
 
         this.get = function(i) {
-            if(i==undefined) i = 0;
+            if(i === undefined) { i = 0; }
 
             return new Result([this.arr[i]]);
         };
 
         this.result = function(i) {
-            if(i==undefined){
+            if(i===undefined){
                 return this.arr;
             }else{
                 return this.arr[i];
@@ -20,7 +20,7 @@ var k = (function(Ink){
         };
 
         return this;
-    }
+    };
 
     //Ink.Util.Array
     Result.prototype.each = function(iterator) {
@@ -97,7 +97,7 @@ var k = (function(Ink){
 
     //Ink.Dom.Event
     Result.prototype.bind = function(ev,calable){
-        if(calable==null){
+        if(calable === undefined){
             //call
             this.each(function(elem){
                 Ink.Dom.Event.fire(elem,ev);
@@ -134,7 +134,7 @@ var k = (function(Ink){
     };
 
     Result.prototype.hover = function(calableIn,calableOut){
-        if(calableOut==undefined){
+        if(calableOut === undefined){
             this.mouseover(calableIn);
         }else{
             this.mouseover(calableIn).mouseout(calableOut);
@@ -147,7 +147,7 @@ var k = (function(Ink){
 
     //Ink.Dom.Element
     Result.prototype.html = function(html){
-        if(html==null && this.arr.length===1){
+        if(html === undefined && this.arr.length===1){
             return Ink.Dom.Element.textContent(this.result(0));
         }
 
@@ -233,7 +233,7 @@ var k = (function(Ink){
             });
         });
 
-        if(i==undefined){
+        if(typeof i !== 'number' && !i){
             return new Result(fetchedChilds);
         }else{
             return new Result(fetchedChilds).get(i);
@@ -251,7 +251,7 @@ var k = (function(Ink){
         });
 
         return new Result(foundElements);
-    }
+    };
 
     var kink = function(param,context){
         if(typeof param == 'string'){
@@ -267,7 +267,7 @@ var k = (function(Ink){
     kink.viewportHeight = Ink.Dom.Element.viewportHeight;
     kink.viewportWidth  = Ink.Dom.Element.viewportWidth;
 
-    kink.ready    = function(callable){Ink.Dom.Loaded.run(callable)};
+    kink.ready    = function(callable){Ink.Dom.Loaded.run(callable);};
     kink.browser  = Ink.Dom.Browser;
     kink.url      = Ink.Util.Url;
     kink.date     = Ink.Util.Date;
@@ -276,37 +276,20 @@ var k = (function(Ink){
 
     // AJAX
     kink.ajax = function(url,options,onComplete){
-        if(typeof options=='function'){
-            var onComplete = options;
-            var options = new Object();
-        }else if(options==undefined){
-            var options = new Object();
+        var cb = onComplete,
+            method = 'Ajax';
+        if(typeof options === 'function') {
+            cb = options;
+            options = { onComplete: cb };
+        } else {
+            options = Ink.extendObj(options, { onComplete: cb });
+            if(options.jsonp) {
+                method = 'JsonP';
+            }
         }
 
-        if(onComplete!=undefined){
-            options.onComplete = onComplete;
-        }
+        return new Ink.Net[method](url, options);
+    };
 
-        return new Ink.Net.Ajax(url,options);
-    }
-
-    // JsonP
-    kink.JsonP = function(url,options,onComplete){
-        if(typeof options=='function'){
-            var onComplete = options;
-            var options = new Object();
-        }else if(options==undefined){
-            var options = new Object();
-        }
-
-        if(onComplete!=undefined){
-            options.onComplete = onComplete;
-        }
-
-        return new Ink.Net.JsonP(url,options);
-    }
-
-
-
- return kink
+    return kink;
 })(Ink);
