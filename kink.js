@@ -96,7 +96,7 @@ var kk = (function(Ink){
     };
 
     //Ink.Dom.Event
-    Result.prototype.bind = function(ev,calable){
+    Result.prototype.on = Result.prototype.bind = function(ev,calable){
         if(calable === undefined){
             //call
             this.each(function(elem){
