@@ -1,0 +1,113 @@
+<html>
+<head>
+    <title>Kink tests</title>
+
+    <link rel="stylesheet" type="text/css" href="http://cdn.ink.sapo.pt/2.0.0/css/ink-min.css">
+    <link rel="stylesheet" type="text/css" href="https://google-code-prettify.googlecode.com/svn/trunk/styles/sunburst.css">
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/prettify.js"></script>
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
+</head>
+<body onload="prettyPrint()">
+    <div class="ink-grid ">
+        <div class="large-100">
+            <h1>Kink</h1>
+
+        </div>
+        <div class="large-50">
+            <ul id="cenas">
+                <li data-test="1"><a href="" class="ink-button">cenas 1</a></li>
+                <li data-test="2"><a href="" class="ink-button">cenas 2</a></li>
+                <li data-test="3"><a href="" class="ink-button">cenas 3</a></li>
+                <li data-test="4"><a href="" class="ink-button">cenas 4</a></li>
+            </ul>
+            <ul  id="coisas">
+                <li data-test="a"><a href="#" class="ink-button">coisas a</a></li>
+                <li data-test="b"><a href="#" class="ink-button">coisas b</a></li>
+                <li data-test="c"><a href="#" class="ink-button">coisas c</a></li>
+                <li data-test="d"><a href="#" class="ink-button">coisas d</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="ink-grid ">
+        <div class="large-100 ">
+            <h2>Kink code</h2>
+<pre class="prettyprint">
+    k.ready(function(){
+
+        //complex selector and mass property setter
+        k('ul#cenas li').style('border:1px solid #CCC');
+
+        //context selector using .find()
+        // using .hover() to control mouse events
+        k('ul#cenas').find('li').hover(function(){
+
+            //Chaining methods like a boss
+            //.find() .html() .addClass()
+            k(this).find('a').html('hover on the < li >').addClass('blue');
+        },function(){
+
+            //geting data atributte "test"
+            var number = k(this).data().test;
+
+            //no need to chain if you dont want to:
+            //you can also use .childs() instead of .find()
+            var button = k(this).childs()
+                button.html('cenas '+number);
+                button.removeClass('blue');
+        });
+
+        //mass selector for a click handler
+        k('li a').click(function(){
+
+            //node navigation with .parent() and DOM access with .result()
+            var parent = k(this).parent().parent().result(0).id;
+
+            var me = k(this).parent().data().test;
+            alert("i`m ("+me+") and a child of ("+parent+") ");
+        });
+
+    });
+</pre>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="kink.js"></script>
+    <script type="text/javascript">
+        k.ready(function(){
+
+            //complex selector and mass property setter
+            k('ul#cenas li').style('border:1px solid #CCC');
+
+            //context selector using .find()
+            // using .hover() to control mouse events
+            k('ul#cenas').find('li').hover(function(){
+
+                //Chaining methods like a boss
+                //.find() .html() .addClass()
+                k(this).find('a').html('hover on the <li>').addClass('blue');
+            },function(){
+
+                //geting data atributte "test"
+                var number = k(this).data().test;
+
+                //no need to chain if you dont want to:
+                //you can also use .childs() instead of .find()
+                var button = k(this).childs()
+                    button.html('cenas '+number);
+                    button.removeClass('blue');
+            });
+
+            //mass selector for a click handler
+            k('li a').click(function(){
+
+                //node navigation with .parent() and DOM access with .result()
+                var parent = k(this).parent().parent().result(0).id;
+
+                var me = k(this).parent().data().test;
+                alert("i`m ("+me+") and a child of ("+parent+") ");
+            });
+
+        });
+    </script>
+</body>
+</html>
