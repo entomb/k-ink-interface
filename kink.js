@@ -28,6 +28,10 @@ var kk = (function(Ink){
         return this;
     };
 
+    Result.prototype.some = function(iterator,callable) {
+        return Ink.Util.Array.some(this.arr,iterator,callable);
+    };
+
 
     //Ink.Dom.Css
     Result.prototype.addClassName = Result.prototype.addClass = function(className){
