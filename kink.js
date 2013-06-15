@@ -1,9 +1,27 @@
-var kk = (function(Ink){
+/**
+ * @module Ink.UI.Kink_1
+ * @author entomb ( https://github.com/entomb/k-ink-interface ) and ported by inkdev AT sapo.pt
+ * @version 1
+ */
+Ink.createModule('Ink.Util.Kink',1,[
+    'Ink.Dom.Browser_1', 'Ink.Dom.Selector_1', 'Ink.Dom.Event_1', 'Ink.Dom.Element_1', 'Ink.Dom.Css_1', 'Ink.Dom.Loaded_1', // DOM
+    'Ink.Util.Array_1', 'Ink.Util.Url_1', 'Ink.Util.String_1', 'Ink.Util.Date_1', 'Ink.Util.Cookie_1',
+    'Ink.Net.Ajax','Ink.Net.JsonP'
+],function(
+    Browser, Selector, Event, Element, Css, Loaded,
+    InkArray, InkUrl, InkString, InkDate, InkCookie,
+    Ajax, JsonP
+){
 
-    //query selector result class
+    /**
+     * @class Result
+     * @constructor
+     * @version 1
+     * @param {Array} resultArray   Array to be manipulated
+     * @private
+     */
     var Result = function(resultArray){
         this.arr = resultArray;
-
 
         this.get = function(i) {
             if(i === undefined) { i = 0; }
@@ -22,221 +40,478 @@ var kk = (function(Ink){
         return this;
     };
 
-    //Ink.Util.Array
+    /**
+     * Alias for the Ink.Util.Array.each method
+     * adding support for chaining.
+     * 
+     * @method each
+     * @param {Function} iterator Callback to run for each item
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.each = function(iterator) {
-        Ink.Util.Array.each(this.arr,iterator);
+        InkArray.each(this.arr,iterator);
         return this;
     };
 
+    /**
+     * Alias for the Ink.Util.Array.some method
+     * adding support for chaining.
+     * 
+     * @method some
+     * @param {Function} iterator Callback to run for each item that will return true or false, specifying if the item should be
+     * in the returned array
+     * @param {Object} [callable] Context in which the callback will run
+     * @return {Array} Returns an array with the items where that the callback returned true.
+     * @public
+     */
     Result.prototype.some = function(iterator,callable) {
-        return Ink.Util.Array.some(this.arr,iterator,callable);
+        return InkArray.some(this.arr,iterator,callable);
     };
 
 
-    //Ink.Dom.Css
+    /**
+     * Alias for the Ink.Dom.Css.addClassName method
+     * adding support for chaining.
+     * 
+     * @method addClass
+     * @param {String} className Class to be added to the element(s)
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.addClassName = Result.prototype.addClass = function(className){
         this.each(function(elem,key){
-            Ink.Dom.Css.addClassName(elem,className);
+            Css.addClassName(elem,className);
         });
-
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.removeClassName method
+     * adding support for chaining.
+     * 
+     * @method removeClass
+     * @param {String} className Class to be removed from the element(s)
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.removeClassName = Result.prototype.removeClass = function(className){
         this.each(function(elem,key){
-            Ink.Dom.Css.removeClassName(elem,className);
+            Css.removeClassName(elem,className);
         });
-
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.setClassName method
+     * adding support for chaining.
+     * 
+     * @method setClass
+     * @param {String} className Class to be added/removed to/from the element(s)
+     * @param {Boolean} boolState Flag that determines if the class should be added or removed
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.setClassName = Result.prototype.setClass = function(className,boolState){
         this.each(function(elem,key){
-            Ink.Dom.Css.setClassName(elem,className,boolState);
+            Css.setClassName(elem,className,boolState);
         });
-
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.hasClassName method
+     * adding support for chaining.
+     * 
+     * @method hasClass
+     * @param {string} className Class to be checked if it is in the element(s)' classList
+     * @return {Array} Returns an array with the elements that have the class.
+     * @public
+     */
     Result.prototype.hasClassName = Result.prototype.hasClass = function(className){
         return this.some(function(elem,key){
-            return Ink.Dom.Css.hasClassName(elem,className);
+            return Css.hasClassName(elem,className);
         });
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.hide method
+     * adding support for chaining.
+     * 
+     * @method hide
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.hide = function(){
          this.each(function(elem){
-            Ink.Dom.Css.hide(elem);
+            Css.hide(elem);
         });
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.show method
+     * adding support for chaining.
+     * 
+     * @method show
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.show = function(){
         this.each(function(elem){
-            Ink.Dom.Css.show(elem);
+            Css.show(elem);
         });
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.showHide method
+     * adding support for chaining.
+     * 
+     * @method showHide
+     * @param {Boolean} boolState Flag that determines if the element(s) should be showed or hidden
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.showHide = function(boolState){
         this.each(function(elem){
-            Ink.Dom.Css.showHide(elem,boolState);
+            Css.showHide(elem,boolState);
         });
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.toggle method
+     * adding support for chaining.
+     * 
+     * @method toggle
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.toggle = function(){
         this.each(function(elem){
-            Ink.Dom.Css.toggle(elem,boolState);
+            Css.toggle(elem,boolState);
         });
         return this;
     };
 
+    /**
+     * Alias for the Ink.Dom.Css.setStyle method
+     * adding support for chaining.
+     * 
+     * @method style
+     * @param {String} inlineStyle Style string to be added to the element(s)' style attribute
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.style = Result.prototype.setStyle = function(inlineStyle){
         this.each(function(elem){
-            Ink.Dom.Css.setStyle(elem,inlineStyle);
+            Css.setStyle(elem,inlineStyle);
         });
         return this;
     };
 
-    //Ink.Dom.Event
-    Result.prototype.on = Result.prototype.bind = function(ev,calable){
-        if(calable === undefined){
+
+    /**
+     * Alias for the Ink.Dom.Event.observe and Ink.Dom.Event.fire methods
+     * adding support for chaining.
+     * 
+     * @method on
+     * @param {String} ev Event to be triggered or listened.
+     * @param {Function} [callback] Callback to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.on = Result.prototype.bind = function(ev,callback){
+        if(callback === undefined){
             //call
             this.each(function(elem){
-                Ink.Dom.Event.fire(elem,ev);
+                Event.fire(elem,ev);
             });
         }else{
             //bind
             this.each(function(elem){
-                Ink.Dom.Event.observe(elem,ev,calable);
+                Event.observe(elem,ev,callback);
             });
         }
 
         return this;
     };
 
-    Result.prototype.click = function(calable){
-        return this.bind('click',calable);
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (click)
+     * adding support for chaining.
+     * 
+     * @method click
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.click = function(callback){
+        return this.bind('click',callback);
     };
 
-    Result.prototype.dblclick = function(calable){
-        return this.bind('dblclick',calable);
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (dblclick)
+     * adding support for chaining.
+     * 
+     * @method dblclick
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.dblclick = function(callback){
+        return this.bind('dblclick',callback);
     };
 
-    Result.prototype.mousemove = function(calable){
-        return this.bind('mousemove',calable);
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (mousemove)
+     * adding support for chaining.
+     * 
+     * @method mousemove
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.mousemove = function(callback){
+        return this.bind('mousemove',callback);
     };
 
-    Result.prototype.mouseover = function(calable){
-        this.bind('mouseover',calable);
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (mouseover)
+     * adding support for chaining.
+     * 
+     * @method mouseover
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.mouseover = function(callback){
+        this.bind('mouseover',callback);
         return this;
     };
-    Result.prototype.mouseout = function(calable){
-        this.bind('mouseout',calable);
+
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (mouseover)
+     * adding support for chaining.
+     * 
+     * @method mouseover
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.mouseout = function(callback){
+        this.bind('mouseout',callback);
         return this;
     };
 
-    Result.prototype.hover = function(calableIn,calableOut){
-        if(calableOut === undefined){
-            this.mouseover(calableIn);
+    /**
+     * Alias for the Result.mouseover and Result.mouseout methods
+     * adding support for chaining.
+     * 
+     * @method hover
+     * @param {Function} callbackIn Callback function to be executed when the mouseover event is triggered
+     * @param {Function} [callbackOut] Callback function to be executed when the mouseout event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.hover = function(callbackIn,callbackOut){
+        if(callbackOut === undefined){
+            this.mouseover(callbackIn);
         }else{
-            this.mouseover(calableIn).mouseout(calableOut);
+            this.mouseover(callbackIn).mouseout(callbackOut);
         }
-
         return this;
     };
 
 
-
-    //Ink.Dom.Element
+    /**
+     * Sets the HTML of elements.
+     * 
+     * @method html
+     * @param {String} html HTML to be written inside the element.
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.html = function(html){
         if(html === undefined && this.arr.length===1){
-            return Ink.Dom.Element.textContent(this.result(0));
+            return Element.textContent(this.result(0));
         }
 
         this.each(function(elem){
-            Ink.Dom.Element.setTextContent(elem,html);
+            Element.setTextContent(elem,html);
         });
-
         return this;
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.appendHTML,
+     * adding chaining support.
+     * 
+     * @method appendHTML
+     * @param {String} html HTML to be appended inside the element.
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.appendHTML = function(html){
-
         this.each(function(elem){
-            Ink.Dom.Element.appendHTML(elem,html);
+            Element.appendHTML(elem,html);
         });
-
         return this;
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.prependHTML,
+     * adding chaining support.
+     * 
+     * @method prependHTML
+     * @param {String} html HTML to be prepended inside the element.
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.prependHTML = function(html){
 
         this.each(function(elem){
-            Ink.Dom.Element.prependHTML(elem,html);
+            Element.prependHTML(elem,html);
         });
-
         return this;
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.remove
+     * 
+     * @method remove
+     * @return {Boolean} Returns true.
+     * @public
+     */
     Result.prototype.remove = function(){
         this.each(function(elem){
-            Ink.Dom.Element.remove(elem);
+            Element.remove(elem);
         });
         return true;
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.data
+     * 
+     * @method data
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
     Result.prototype.data = function(){
-        return Ink.Dom.Element.data(this.result(0));
+        return Element.data(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.elementDimensions
+     * 
+     * @method size
+     * @return {Array} Returns an array where the first position is the width and the second is the height of the element.
+     * @public
+     */
     Result.prototype.size = Result.prototype.elementDimensions = function(){
-        return Ink.Dom.Element.elementDimensions(this.result(0));
+        return Element.elementDimensions(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.elementHeight
+     * 
+     * @method height
+     * @return {Number} Returns the height in pixels.
+     * @public
+     */
     Result.prototype.height = Result.prototype.elementHeight = function(){
-        return Ink.Dom.Element.elementHeight(this.result(0));
+        return Element.elementHeight(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.elementWidth
+     * 
+     * @method width
+     * @return {Number} Returns the width of the element in pixels.
+     * @public
+     */
     Result.prototype.width = Result.prototype.elementWidth = function(){
-        return Ink.Dom.Element.elementWidth(this.result(0));
+        return Element.elementWidth(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.hasAttribute
+     * 
+     * @method hasAttribute
+     * @param {String} attr Name of the attribute to check if it exists in the element
+     * @return {Array} Returns an array of elements that have the attribute.
+     * @public
+     */
     Result.prototype.hasAttribute = function(attr){
         return this.some(function(elem){
-            return Ink.Dom.Element.hasAttribute(elem,attr);
+            return Element.hasAttribute(elem,attr);
         });
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.scroll
+     * 
+     * @method scroll
+     * @return {Array} Returns an array where the first position is the horizontal scroll position and the second is the vertical scroll position.
+     * @public
+     */
     Result.prototype.scroll = function(){
-        return Ink.Dom.Element.scroll(this.result(0));
+        return Element.scroll(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.scrollTo
+     * 
+     * @method scrollTo
+     * @return {Result} Scrolls to the element.
+     * @public
+     */
     Result.prototype.scrollTo = function(){
-        return Ink.Dom.Element.scrollTo(this.result(0));
+        return Element.scrollTo(this.result(0));
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.siblings,
+     * adding chaining support.
+     * 
+     * @method siblings
+     * @return {Result} Returns a new Result object with an array of siblings.
+     * @public
+     */
     Result.prototype.siblings = function(){
-        return new Result(Ink.Dom.Element.siblings(this.result(0)));
+        return new Result(Element.siblings(this.result(0)));
     };
 
+    /**
+     * Alias of the <node>.parentNode,
+     * adding chaining support.
+     * 
+     * @method parentNode
+     * @return {Result} Returns a new Result object with an array with the parentNode.
+     * @public
+     */
     Result.prototype.parent = function(){
         return new Result([this.result(0).parentNode]);
     };
 
+    /**
+     * Method to get the childrenNodes of a set of elements.
+     * 
+     * @method childs
+     * @param {Number} [i] Index of the specific item in the array of children nodes.
+     * @return {Result} Returns a new Result object with the array of childrens.
+     * @public
+     */
     Result.prototype.childs = function(i){
-
         var fetchedChilds = [];
-
         this.each(function(elem){
-            var collection = Ink.Util.Array.convert(elem.children);
+            var collection = InkArray.convert(elem.children);
             var childs = new Result(collection);
             childs.each(function(childElem){
                 fetchedChilds.push(childElem);
             });
         });
-
         if(typeof i !== 'number' && !i){
             return new Result(fetchedChilds);
         }else{
@@ -244,11 +519,20 @@ var kk = (function(Ink){
         }
     };
 
+    /**
+     * Alias of the Ink.Dom.Selector.select with the second parameter filled,
+     * adding chaining support.
+     * 
+     * @method find
+     * @param {String} param CSS Selector.
+     * @return {Result} Returns a new Result object with the elements found.
+     * @public
+     */
     Result.prototype.find = function(param){
         var foundElements = [];
 
         this.each(function(elem){
-            var elements = new Result(Ink.Dom.Selector.select(param,elem));
+            var elements = new Result(Selector.select(param,elem));
             elements.each(function(childElem){
                 foundElements.push(childElem);
             });
@@ -257,9 +541,18 @@ var kk = (function(Ink){
         return new Result(foundElements);
     };
 
+    /**
+     * The 'kink' object is in the base of the usage of the Result class
+     * 
+     * @function kink
+     * @param {String} param CSS Selector.
+     * @param {String} [context] Context in which the selector will act.
+     * @return {Result} Returns a new Result object with the elements found.
+     * @public
+     */
     var kink = function(param,context){
         if(typeof param == 'string'){
-            return new Result(Ink.Dom.Selector.select(param,context));
+            return new Result(Selector.select(param,context));
         }else if(param instanceof Array){
             return new Result(param);
         }else{
@@ -267,18 +560,80 @@ var kk = (function(Ink){
         }
     };
 
+    /**
+     * Alias of the Ink.Dom.Element.viewportHeight
+     *
+     * @method viewportHeight
+     * @return {Number} Viewport's height in pixels
+     */
+    kink.viewportHeight = Element.viewportHeight;
 
-    kink.viewportHeight = Ink.Dom.Element.viewportHeight;
-    kink.viewportWidth  = Ink.Dom.Element.viewportWidth;
 
-    kink.ready    = function(callable){Ink.Dom.Loaded.run(callable);};
-    kink.browser  = Ink.Dom.Browser;
-    kink.url      = Ink.Util.Url;
-    kink.date     = Ink.Util.Date;
-    kink.string   = Ink.Util.String;
-    kink.cookie   = Ink.Util.Cookie;
+    /**
+     * Alias of the Ink.Dom.Element.viewportWidth
+     *
+     * @method viewportWidth
+     * @return {Number} Viewport's width in pixels
+     */
+    kink.viewportWidth  = Element.viewportWidth;
 
-    // AJAX
+    /**
+     * Alias of the Ink.Dom.Loaded.run
+     *
+     * @method ready
+     */
+    kink.ready    = function(callable){Loaded.run(callable);};
+
+    /**
+     * Alias of the Ink.Dom.Browser
+     *
+     * @property browser
+     * @type {Object}
+     * @static
+     */
+    kink.browser  = Browser;
+
+    /**
+     * Alias of the Ink.Util.Url
+     *
+     * @property url
+     * @type {Object}
+     */
+    kink.url      = InkUrl;
+
+    /**
+     * Alias of the Ink.Util.Date
+     *
+     * @property date
+     * @type {Object}
+     */
+    kink.date     = InkDate;
+
+    /**
+     * Alias of the Ink.Util.String
+     *
+     * @property string
+     * @type {Object}
+     */
+    kink.string   = InkString;
+
+    /**
+     * Alias of the Ink.Util.Cookie
+     *
+     * @property cookie
+     * @type {Object}
+     */
+    kink.cookie   = InkCookie;
+
+
+    /**
+     * Alias of the Ink.Net.Ajax or Ink.Net.JsonP (depending on the usage)
+     *
+     * @method ajax
+     * @param {String} url URL to be used in the call
+     * @param {Object|Function} options Options to be passed when in an AJAX call. If it's a JSONP call it will be a callback function that will be executed onComplete.
+     * @param {Function} onComplete Callback function for the AJAX call.
+     */
     kink.ajax = function(url,options,onComplete){
         var cb = onComplete,
             method = 'Ajax';
@@ -292,8 +647,9 @@ var kk = (function(Ink){
             }
         }
 
-        return new Ink.Net[method](url, options);
+        return new method.call(this,url, options);
     };
 
+    window.kk = kink;
     return kink;
-})(Ink);
+});
