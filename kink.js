@@ -14,13 +14,38 @@ Ink.createModule('Ink.Util.Kink',1,[
 ){
 
     /**
+     * This function is the 'binded' handler that will take care of all the 'live' definitions (see live() method).
+     * 
+     * @function liveEventsHandler
+     * @param  {String} event Event to be listened in the document element
+     * @return {Function} Returns a function to be added in the Event.observe().
+     */
+    var liveEventsHandler = function( event ) {
+        return Ink.bindEvent(
+            function( e ){
+                for( var selector in kink.liveEvents[event] ){
+                    var
+                        arrElem = Selector.select(selector),
+                        tgtEl = Event.element(e)
+                    ;
+                    if( arrElem.indexOf(tgtEl) !== -1 ){
+                        InkArray.each(kink.liveEvents[event][selector], function(fn){
+                            fn.call(tgtEl,e);
+                        });
+                    }
+                }
+        },this);
+    };
+
+    /**
      * @class Result
      * @constructor
      * @version 1
      * @param {Array} resultArray   Array to be manipulated
      * @private
      */
-    var Result = function(resultArray){
+    var Result = function(resultArray,selector){
+        this.selector = selector;
         this.arr = resultArray;
 
         this.get = function(i) {
@@ -235,6 +260,76 @@ Ink.createModule('Ink.Util.Kink',1,[
             });
         }
 
+        return this;
+    };
+
+    /**
+     * It will create a list of events and selectors to be checking when those events in that list are triggered.
+     * That way we can run callbacks on events triggered by new elements (dynamically created after the listener has been created).
+     * 
+     * @method live
+     * @param {String} event Name of the event that was added on live()
+     * @param {Function} callback Function/listener you want to run when the event is triggered.
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.live = function(event, callback){
+        if( typeof(this.selector) !== 'string' ){
+            return;
+        }
+
+        if( !(event in kink.liveEvents) ){
+            Event.observe(document,event, liveEventsHandler(event) );
+        }
+
+        if( !(event in kink.liveEvents) ){
+            kink.liveEvents[event] = {};
+        }
+
+        if( !(this.selector in kink.liveEvents[event]) ){
+            kink.liveEvents[event][this.selector] = [];
+        }
+        kink.liveEvents[event][this.selector].push( callback );
+
+        return this;
+    };
+
+    /**
+     * Removes event listenings added with the live() method
+     * 
+     * @method die
+     * @param {String} event Name of the event that was added on live()
+     * @param {Function} [handler] Function/listener you want to remove. If you don't pass a handler, it will remove all listeners related with the specified event (and selector)
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.die = function(event, handler){
+
+        if( typeof handler !== 'undefined' ){
+
+            if( !(this.selector in kink.liveEvents[event]) ){
+                return;
+            }
+
+            var pos = kink.liveEvents[event][this.selector].indexOf(handler);
+            if( pos !== -1 ){
+                kink.liveEvents[event][this.selector].splice(pos,1);
+            }
+        } else {
+            kink.liveEvents[event][this.selector].splice(0,(kink.liveEvents[event][this.selector].length-1));
+        }
+
+        if( kink.liveEvents[event][this.selector].length === 0 ){
+            delete kink.liveEvents[event][this.selector];
+        }
+
+        var numProps = 0;
+        for( var sel in kink.liveEvents[event] ){
+            if( kink.liveEvents[event].hasOwnProperty(sel) ){ numProps++; }
+        }
+        if( numProps === 0){
+            Event.stopObserving(document, event, liveEventsHandler(event));
+        }
         return this;
     };
 
@@ -551,14 +646,23 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @public
      */
     var kink = function(param,context){
-        if(typeof param == 'string'){
-            return new Result(Selector.select(param,context));
+        if(typeof param === 'string'){
+            return new Result(Selector.select(param,context),param);
         }else if(param instanceof Array){
             return new Result(param);
         }else{
             return new Result([param]);
         }
     };
+
+
+    /**
+     * Kink object that will track the live() events registered.
+     * @type {Object}
+     * @public
+     * @static
+     */
+    kink.liveEvents = {};
 
     /**
      * Alias of the Ink.Dom.Element.viewportHeight
