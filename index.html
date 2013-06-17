@@ -31,74 +31,88 @@
         <div class="large-100 ">
             <h2>Kink code</h2>
 <pre class="prettyprint">
-Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
-    kk.ready(function(){
+kk.ready(function(){
+    //complex selector and mass property setter
+    kk('ul#cenas li').style('border:1px solid #CCC');
 
-        //complex selector and mass property setter
-        kk('ul#cenas li').style('border:1px solid #CCC');
+    //context selector using .find()
+    // using .hover() to control mouse events
+    kk('ul#cenas').find('li').hover(function(){
 
-        //context selector using .find()
-        // using .hover() to control mouse events
-        kk('ul#cenas').find('li').hover(function(){
+        //Chaining methods like a boss
+        //.find() .html() .addClass()
+        kk(this).find('a').html('hover on the < li >').addClass('blue');
+    },function(){
 
-            //Chaining methods like a boss
-            //.find() .html() .addClass()
-            kk(this).find('a').html('hover on the < li >').addClass('blue');
-        },function(){
+        //geting data atributte "test"
+        var number = kk(this).data().test;
 
-            //geting data atributte "test"
-            var number = kk(this).data().test;
-
-            //no need to chain if you dont want to:
-            //you can also use .childs() instead of .find()
-            var button = kk(this).childs()
-                button.html('cenas '+number);
-                button.removeClass('blue');
-        });
-
-        //mass selector for a click handler
-        kk('li a').click(function(){
-
-            //node navigation with .parent() and DOM access with .result()
-            var parent = kk(this).parent().parent().result(0).id;
-
-            var me = kk(this).parent().data().test;
-            alert("i`m ("+me+") and a child of ("+parent+") ");
-        });
-
-
-        /**
-         * Function to run on live()
-         */
-        var fn = function(event){
-            Ink.Dom.Event.stop(event);
-
-            var colors = [];
-            for( var i = 0; i<3; i++ ){
-                colors.push( Math.floor( (Math.random()*255)+1 ) );
-            }
-
-            kk('body').style('background-color:rgb('+colors.join(',')+')');
-        };
-
-        kk('.test').live('click',fn);
-
-        /**
-         * After 10 seconds it will create a new button
-         * After 30 seconds it will remove the live() event.
-         */
-        setTimeout(function(){
-            kk('body').prependHTML('&lt;button class="test"&gt;This is a test&lt;/button&gt;');
-            alert("The button's event listener will be disabled in 30 seconds");
-
-            setTimeout(function(){
-                kk('.test').die('click',fn);
-                alert('The listener was removed!');
-            },30000);
-
-        },10000);
-
+        //no need to chain if you dont want to:
+        //you can also use .childs() instead of .find()
+        var button = kk(this).childs()
+            button.html('cenas '+number);
+            button.removeClass('blue');
     });
+
+    //mass selector for a click handler
+    kk('li a').click(function(){
+
+        //node navigation with .parent() and DOM access with .result()
+        var parent = kk(this).parent().parent().result(0).id;
+
+        var me = kk(this).parent().data().test;
+        alert("i`m ("+me+") and a child of ("+parent+") ");
+    });
+
+
+    /**
+     * Creating an extention with a set of options (optional)
+     */
+    kk.extend('extendTest',function(options){
+        //'this' is the kk() resultset
+        this.hover(function(){
+
+            console.log(kk(this).parent().data()[options.key]);
+        });
+        return this;
+    });
+
+    /**
+     * using the new extention on a selector
+     * options are optional (lol)
+     */
+    kk('a').extendTest({key:'test'});
+
+    /**
+     * Function to run on live()
+     */
+    var fn = function(event){
+        Ink.Dom.Event.stop(event);
+
+        var colors = [];
+        for( var i = 0; i<3; i++ ){
+            colors.push( Math.floor( (Math.random()*255)+1 ) );
+        }
+
+        kk('body').style('background-color:rgb('+colors.join(',')+')');
+    };
+
+    kk('.test').live('click',fn);
+
+    /**
+     * After 10 seconds it will create a new button
+     * After 30 seconds it will remove the live() event.
+     */
+    setTimeout(function(){
+        kk('body').prependHTML('<button class="test">This is a test</button>');
+        alert("The button's event listener will be disabled in 30 seconds");
+
+        setTimeout(function(){
+            kk('.test').die('click',fn);
+            alert('The listener was removed!');
+        },30000);
+
+    },10000);
 });
 </pre>
         </div>
@@ -106,7 +120,6 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
 
     <script type="text/javascript" src="kink.js"></script>
     <script type="text/javascript">
-    Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
         kk.ready(function(){
 
             //complex selector and mass property setter
@@ -141,6 +154,25 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
                 alert("i`m ("+me+") and a child of ("+parent+") ");
             });
 
+
+            /**
+             * Creating an extention with a set of options (optional)
+             */
+            kk.extend('extendTest',function(options){
+                //'this' is the kk() resultset
+                this.hover(function(){
+
+                    console.log(kk(this).parent().data()[options.key]);
+                });
+                return this;
+            });
+
+            /**
+             * using the new extention on a selector
+             * options are optional (lol)
+             */
+            kk('a').extendTest({key:'test'});
+
             /**
              * Function to run on live()
              */
@@ -172,7 +204,6 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
 
             },10000);
         });
-    });
     </script>
 </body>
 </html>
