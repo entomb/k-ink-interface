@@ -4,18 +4,38 @@
  * @version 1
  */
 Ink.createModule('Ink.Util.Kink',1,[
-    'Ink.Dom.Browser_1', 'Ink.Dom.Selector_1', 'Ink.Dom.Event_1', 'Ink.Dom.Element_1', 'Ink.Dom.Css_1', 'Ink.Dom.Loaded_1', // DOM
-    'Ink.Util.Array_1', 'Ink.Util.Url_1', 'Ink.Util.String_1', 'Ink.Util.Date_1', 'Ink.Util.Cookie_1',
-    'Ink.Net.Ajax','Ink.Net.JsonP'
+    'Ink.Dom.Browser_1',
+    'Ink.Dom.Selector_1',
+    'Ink.Dom.Event_1',
+    'Ink.Dom.Element_1',
+    'Ink.Dom.Css_1',
+    'Ink.Dom.Loaded_1', // DOM
+    'Ink.Util.Array_1',
+    'Ink.Util.Url_1',
+    'Ink.Util.String_1',
+    'Ink.Util.Date_1',
+    'Ink.Util.Cookie_1',
+    'Ink.Net.Ajax',
+    'Ink.Net.JsonP'
 ],function(
-    Browser, Selector, Event, Element, Css, Loaded,
-    InkArray, InkUrl, InkString, InkDate, InkCookie,
-    Ajax, JsonP
+    Browser,
+    Selector,
+    Event,
+    Element,
+    Css,
+    Loaded,
+    InkArray,
+    InkUrl,
+    InkString,
+    InkDate,
+    InkCookie,
+    Ajax,
+    JsonP
 ){
 
     /**
      * This function is the 'binded' handler that will take care of all the 'live' definitions (see live() method).
-     * 
+     *
      * @function liveEventsHandler
      * @param  {String} event Event to be listened in the document element
      * @return {Function} Returns a function to be added in the Event.observe().
@@ -68,7 +88,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Util.Array.each method
      * adding support for chaining.
-     * 
+     *
      * @method each
      * @param {Function} iterator Callback to run for each item
      * @return {Result} Returns the same object to support chaining.
@@ -82,7 +102,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Util.Array.some method
      * adding support for chaining.
-     * 
+     *
      * @method some
      * @param {Function} iterator Callback to run for each item that will return true or false, specifying if the item should be
      * in the returned array
@@ -98,7 +118,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.addClassName method
      * adding support for chaining.
-     * 
+     *
      * @method addClass
      * @param {String} className Class to be added to the element(s)
      * @return {Result} Returns the same object to support chaining.
@@ -114,7 +134,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.removeClassName method
      * adding support for chaining.
-     * 
+     *
      * @method removeClass
      * @param {String} className Class to be removed from the element(s)
      * @return {Result} Returns the same object to support chaining.
@@ -130,7 +150,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.setClassName method
      * adding support for chaining.
-     * 
+     *
      * @method setClass
      * @param {String} className Class to be added/removed to/from the element(s)
      * @param {Boolean} boolState Flag that determines if the class should be added or removed
@@ -147,7 +167,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.hasClassName method
      * adding support for chaining.
-     * 
+     *
      * @method hasClass
      * @param {string} className Class to be checked if it is in the element(s)' classList
      * @return {Array} Returns an array with the elements that have the class.
@@ -162,7 +182,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.hide method
      * adding support for chaining.
-     * 
+     *
      * @method hide
      * @return {Result} Returns the same object to support chaining.
      * @public
@@ -177,7 +197,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.show method
      * adding support for chaining.
-     * 
+     *
      * @method show
      * @return {Result} Returns the same object to support chaining.
      * @public
@@ -192,7 +212,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.showHide method
      * adding support for chaining.
-     * 
+     *
      * @method showHide
      * @param {Boolean} boolState Flag that determines if the element(s) should be showed or hidden
      * @return {Result} Returns the same object to support chaining.
@@ -208,7 +228,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.toggle method
      * adding support for chaining.
-     * 
+     *
      * @method toggle
      * @return {Result} Returns the same object to support chaining.
      * @public
@@ -223,7 +243,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Css.setStyle method
      * adding support for chaining.
-     * 
+     *
      * @method style
      * @param {String} inlineStyle Style string to be added to the element(s)' style attribute
      * @return {Result} Returns the same object to support chaining.
@@ -240,7 +260,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe and Ink.Dom.Event.fire methods
      * adding support for chaining.
-     * 
+     *
      * @method on
      * @param {String} ev Event to be triggered or listened.
      * @param {Function} [callback] Callback to be executed when the specified event is triggered
@@ -266,7 +286,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * It will create a list of events and selectors to be checking when those events in that list are triggered.
      * That way we can run callbacks on events triggered by new elements (dynamically created after the listener has been created).
-     * 
+     *
      * @method live
      * @param {String} event Name of the event that was added on live()
      * @param {Function} callback Function/listener you want to run when the event is triggered.
@@ -296,7 +316,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Removes event listenings added with the live() method
-     * 
+     *
      * @method die
      * @param {String} event Name of the event that was added on live()
      * @param {Function} [handler] Function/listener you want to remove. If you don't pass a handler, it will remove all listeners related with the specified event (and selector)
@@ -336,7 +356,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (click)
      * adding support for chaining.
-     * 
+     *
      * @method click
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
@@ -349,7 +369,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (dblclick)
      * adding support for chaining.
-     * 
+     *
      * @method dblclick
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
@@ -362,7 +382,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (mousemove)
      * adding support for chaining.
-     * 
+     *
      * @method mousemove
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
@@ -375,7 +395,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (mouseover)
      * adding support for chaining.
-     * 
+     *
      * @method mouseover
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
@@ -389,7 +409,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (mouseover)
      * adding support for chaining.
-     * 
+     *
      * @method mouseover
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
@@ -403,7 +423,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias for the Result.mouseover and Result.mouseout methods
      * adding support for chaining.
-     * 
+     *
      * @method hover
      * @param {Function} callbackIn Callback function to be executed when the mouseover event is triggered
      * @param {Function} [callbackOut] Callback function to be executed when the mouseout event is triggered
@@ -422,7 +442,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Sets the HTML of elements.
-     * 
+     *
      * @method html
      * @param {String} html HTML to be written inside the element.
      * @return {Result} Returns the same object to support chaining.
@@ -442,7 +462,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the Ink.Dom.Element.appendHTML,
      * adding chaining support.
-     * 
+     *
      * @method appendHTML
      * @param {String} html HTML to be appended inside the element.
      * @return {Result} Returns the same object to support chaining.
@@ -458,7 +478,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the Ink.Dom.Element.prependHTML,
      * adding chaining support.
-     * 
+     *
      * @method prependHTML
      * @param {String} html HTML to be prepended inside the element.
      * @return {Result} Returns the same object to support chaining.
@@ -474,7 +494,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.remove
-     * 
+     *
      * @method remove
      * @return {Boolean} Returns true.
      * @public
@@ -488,7 +508,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.data
-     * 
+     *
      * @method data
      * @return {Result} Returns the same object to support chaining.
      * @public
@@ -499,7 +519,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.elementDimensions
-     * 
+     *
      * @method size
      * @return {Array} Returns an array where the first position is the width and the second is the height of the element.
      * @public
@@ -510,7 +530,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.elementHeight
-     * 
+     *
      * @method height
      * @return {Number} Returns the height in pixels.
      * @public
@@ -521,7 +541,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.elementWidth
-     * 
+     *
      * @method width
      * @return {Number} Returns the width of the element in pixels.
      * @public
@@ -532,7 +552,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.hasAttribute
-     * 
+     *
      * @method hasAttribute
      * @param {String} attr Name of the attribute to check if it exists in the element
      * @return {Array} Returns an array of elements that have the attribute.
@@ -546,7 +566,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.scroll
-     * 
+     *
      * @method scroll
      * @return {Array} Returns an array where the first position is the horizontal scroll position and the second is the vertical scroll position.
      * @public
@@ -557,7 +577,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.scrollTo
-     * 
+     *
      * @method scrollTo
      * @return {Result} Scrolls to the element.
      * @public
@@ -569,7 +589,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the Ink.Dom.Element.siblings,
      * adding chaining support.
-     * 
+     *
      * @method siblings
      * @return {Result} Returns a new Result object with an array of siblings.
      * @public
@@ -581,7 +601,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the <node>.parentNode,
      * adding chaining support.
-     * 
+     *
      * @method parentNode
      * @return {Result} Returns a new Result object with an array with the parentNode.
      * @public
@@ -592,7 +612,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Method to get the childrenNodes of a set of elements.
-     * 
+     *
      * @method childs
      * @param {Number} [i] Index of the specific item in the array of children nodes.
      * @return {Result} Returns a new Result object with the array of childrens.
@@ -617,7 +637,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the Ink.Dom.Selector.select with the second parameter filled,
      * adding chaining support.
-     * 
+     *
      * @method find
      * @param {String} param CSS Selector.
      * @return {Result} Returns a new Result object with the elements found.
@@ -638,7 +658,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * The 'kink' object is in the base of the usage of the Result class
-     * 
+     *
      * @function kink
      * @param {String} param CSS Selector.
      * @param {String} [context] Context in which the selector will act.
@@ -728,6 +748,24 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @type {Object}
      */
     kink.cookie   = InkCookie;
+
+
+
+    /**
+     * Simple extender for the result prototype allowing for added functionality
+     * will return false if the method could not be set
+     *
+     * @method extend
+     * @param {String} method the new method/function name
+     * @param {Function} callable  the new method function, scope of 'this' will be the Result obj
+     */
+    kink.extend = function(method,callable){
+        if(Result.prototype[method]===undefined){
+            Result.prototype[method] = callable;
+            return true;
+        }
+        return false;
+    }
 
 
     /**

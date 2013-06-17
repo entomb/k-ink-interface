@@ -80,7 +80,7 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
 
             kk('body').style('background-color:rgb('+colors.join(',')+')');
         };
-        
+
         kk('.test').live('click',fn);
 
         /**
@@ -141,11 +141,6 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
                 alert("i`m ("+me+") and a child of ("+parent+") ");
             });
 
-            var fn = function(e){
-                console.log("Behold me!")
-            };
-
-
             /**
              * Function to run on live()
              */
@@ -159,7 +154,7 @@ Ink.requireModules(['Ink.Util.Kink_1'],function(Kink){
 
                 kk('body').style('background-color:rgb('+colors.join(',')+')');
             };
-            
+
             kk('.test').live('click',fn);
 
             /**
