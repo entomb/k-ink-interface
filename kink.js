@@ -708,6 +708,14 @@ Ink.createModule('Ink.Util.Kink',1,[
      */
     kink.ready    = function(callable){Loaded.run(callable);};
 
+
+    /**
+     * Alias of the Ink.Dom.Css.appendStylesheet
+     *
+     * @method appendStylesheet
+     */
+    kink.appendStylesheet = function(path,options){Css.appendStylesheet(path,options)};
+
     /**
      * Alias of the Ink.Dom.Browser
      *

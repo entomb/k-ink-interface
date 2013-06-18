@@ -1,6 +1,6 @@
-(function(Ink){
+(function(){
 
-    Ink.Dom.Css.appendStylesheet('plugin/animate.css');
+    kk.appendStylesheet('plugin/animate.css');
 
     kk.extend('animate',function(effect){
 
@@ -16,4 +16,4 @@
     });
 
 
-})(Ink);
+})();
