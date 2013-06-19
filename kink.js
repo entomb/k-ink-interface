@@ -634,6 +634,51 @@ Ink.createModule('Ink.Util.Kink',1,[
         }
     };
 
+
+     /**
+     * Setter and getter for values
+     *
+     * @method attribute
+     * @param {String} value the value to set. if on a <select> it will select the option with this value.
+     * @return {String|Result} trows an onChange() event on all elements or returns the value.
+     * @public
+     */
+    Result.prototype.value = Result.prototype.val = function(value){
+        if(value==undefined){
+            var elem = this.result(0);
+            if(elem.tagName=='SELECT'){
+                return elem.options[elem.selectedIndex].value;
+            }else if(elem.tagName=='TEXTAREA'){
+                return elem.innerHTML;
+            }else{
+                return elem.value;
+            }
+        }else{
+            this.each(function(elem){
+                if(elem.tagName=='SELECT'){
+                    var index = false;
+                    kink(InkArray.convert(elem.options)).each(function(opt,k){
+                        if(opt.value==value){
+                            index = k;
+                        }
+                    });
+                    if(index){
+                        //found index
+                        elem.selectedIndex = index;
+                    }
+                }else if(elem.tagName=='TEXTAREA'){
+                    elem.innerHTML = value;
+                }else{
+                    elem.value = value;
+                }
+            });
+
+            return this.on('change');
+        }
+    };
+
+
+
     /**
      * Alias of the Ink.Dom.Element.scroll
      *
