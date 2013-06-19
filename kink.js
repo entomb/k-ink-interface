@@ -531,6 +531,28 @@ Ink.createModule('Ink.Util.Kink',1,[
     };
 
     /**
+     * Alias of the Ink.Dom.Element.offset
+     * 
+     * @method absolutePosition
+     * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element relative to the documents top left corner.
+     * @public
+     */
+    Result.prototype.absolutePosition = Result.prototype.offset = function(){
+        return Element.offset(this.result(0));
+    };
+
+    /**
+     * Alias of the Ink.Dom.Element.offset
+     * 
+     * @method absolutePosition
+     * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element in the viewport.
+     * @public
+     */
+    Result.prototype.position = Result.prototype.offset2 = function(){
+        return Element.offset2(this.result(0));
+    };
+
+    /**
      * Alias of the Ink.Dom.Element.hasAttribute
      * 
      * @method hasAttribute
