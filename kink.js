@@ -646,16 +646,16 @@ Ink.createModule('Ink.Util.Kink',1,[
     Result.prototype.value = Result.prototype.val = function(value){
         if(value==undefined){
             var elem = this.result(0);
-            if(elem.tagName=='SELECT'){
+            if(elem.nodeName=='SELECT'){
                 return elem.options[elem.selectedIndex].value;
-            }else if(elem.tagName=='TEXTAREA'){
+            }else if(elem.nodeName=='TEXTAREA'){
                 return elem.innerHTML;
             }else{
                 return elem.value;
             }
         }else{
             this.each(function(elem){
-                if(elem.tagName=='SELECT'){
+                if(elem.nodeName=='SELECT'){
                     var index = false;
                     kink(InkArray.convert(elem.options)).each(function(opt,k){
                         if(opt.value==value){
@@ -666,7 +666,7 @@ Ink.createModule('Ink.Util.Kink',1,[
                         //found index
                         elem.selectedIndex = index;
                     }
-                }else if(elem.tagName=='TEXTAREA'){
+                }else if(elem.nodeName=='TEXTAREA'){
                     elem.innerHTML = value;
                 }else{
                     elem.value = value;
