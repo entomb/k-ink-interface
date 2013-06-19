@@ -552,7 +552,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.offset
-     * 
+     *
      * @method absolutePosition
      * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element relative to the documents top left corner.
      * @public
@@ -563,7 +563,7 @@ Ink.createModule('Ink.Util.Kink',1,[
 
     /**
      * Alias of the Ink.Dom.Element.offset
-     * 
+     *
      * @method position
      * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element in the viewport.
      * @public
@@ -629,7 +629,17 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @public
      */
     Result.prototype.parent = function(){
-        return new Result([this.result(0).parentNode]);
+        var parents = [];
+        this.each(function(elem,num){
+            if(!Ink.Util.Array.inArray(elem.parentNode,parents)){
+                parents.push(elem.parentNode);
+            }
+        });
+
+        //unique?
+        //Using Ink.Util.Array.inArray instead
+        //parents.filter(function (e,i,arr) { return arr.lastIndexOf(e) === i; });
+        return new Result(parents);
     };
 
     /**
@@ -692,6 +702,8 @@ Ink.createModule('Ink.Util.Kink',1,[
             return new Result(Selector.select(param,context),param);
         }else if(param instanceof Array){
             return new Result(param);
+        }if(param instanceof Result){
+            return new param;
         }else{
             return new Result([param]);
         }
