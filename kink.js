@@ -379,6 +379,35 @@ Ink.createModule('Ink.Util.Kink',1,[
         return this.bind('dblclick',callback);
     };
 
+
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (focus)
+     * adding support for chaining.
+     *
+     * @method focus
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.focus = function(callback){
+        return this.bind('focus',callback);
+    };
+
+
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (blur)
+     * adding support for chaining.
+     *
+     * @method focus
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.blur = function(callback){
+        return this.bind('blur',callback);
+    };
+
+
     /**
      * Alias for the Ink.Dom.Event.observe method with the event already defined (mousemove)
      * adding support for chaining.
@@ -584,6 +613,25 @@ Ink.createModule('Ink.Util.Kink',1,[
         return this.some(function(elem){
             return Element.hasAttribute(elem,attr);
         });
+    };
+
+    /**
+     * Setter and getter for attributes
+     *
+     * @method attribute
+     * @param {String} attr Name of the attribute to check if it exists in the element
+     * @return {Array} Returns an array of elements that have the attribute.
+     * @public
+     */
+    Result.prototype.attr = Result.prototype.attribute = function(attr,value){
+        if(value!=undefined){
+            this.each(function(elem){
+                elem.setAttribute(attr,value);
+            });
+            return this;
+        }else{
+            return this.result(0).getAttribute(attr);
+        }
     };
 
     /**
