@@ -544,7 +544,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     /**
      * Alias of the Ink.Dom.Element.offset
      * 
-     * @method absolutePosition
+     * @method position
      * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element in the viewport.
      * @public
      */
