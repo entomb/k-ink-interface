@@ -398,13 +398,27 @@ Ink.createModule('Ink.Util.Kink',1,[
      * Alias for the Ink.Dom.Event.observe method with the event already defined (blur)
      * adding support for chaining.
      *
-     * @method focus
+     * @method blur
      * @param {Function} callback Callback function to be executed when the specified event is triggered
      * @return {Result} Returns the same object to support chaining.
      * @public
      */
     Result.prototype.blur = function(callback){
         return this.bind('blur',callback);
+    };
+
+
+    /**
+     * Alias for the Ink.Dom.Event.observe method with the event already defined (change)
+     * adding support for chaining.
+     *
+     * @method change
+     * @param {Function} callback Callback function to be executed when the specified event is triggered
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.change = function(callback){
+        return this.bind('change',callback);
     };
 
 
