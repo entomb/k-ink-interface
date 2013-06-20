@@ -734,6 +734,32 @@ Ink.createModule('Ink.Util.Kink',1,[
         return new Result(Element.siblings(this.result(0)));
     };
 
+
+    /**
+     * Alias of the Ink.Dom.Element.nextElementSibling,
+     * adding chaining support.
+     *
+     * @method next
+     * @return {Result} Returns a new Result object with an array[1] witgh the next sibling.
+     * @public
+     */
+    Result.prototype.next = function(){
+        return new Result([Element.nextElementSibling(this.result(0))]);
+    };
+
+
+    /**
+     * Alias of the Ink.Dom.Element.previousElementSibling,
+     * adding chaining support.
+     *
+     * @method prev
+     * @return {Result} Returns a new Result object with an array[1] witgh the previsous sibling.
+     * @public
+     */
+    Result.prototype.prev = function(){
+        return new Result([Element.previousElementSibling(this.result(0))]);
+    };
+
     /**
      * Alias of the <node>.parentNode,
      * adding chaining support.
