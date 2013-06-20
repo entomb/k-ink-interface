@@ -484,6 +484,22 @@ Ink.createModule('Ink.Util.Kink',1,[
 
 
     /**
+     * Appends all resultset to the first result of a selector
+     *
+     * @method appendTo
+     * @param {String} css selector to find an alement and append the current resultset to it, will append to the first element it finds
+     * @return {Result} Returns the same object to support chaining.
+     * @public
+     */
+    Result.prototype.appendTo = function(select){
+        this.each(function(elem){
+            kink(select).result(0).appendChild(elem);
+        });
+        return this;
+    };
+
+
+    /**
      * Sets the HTML of elements.
      *
      * @method html
@@ -978,6 +994,20 @@ Ink.createModule('Ink.Util.Kink',1,[
         }
 
         return new method.call(this,url, options);
+    };
+
+
+    /**
+     * Alias of the Element.create
+     * Creates a new DOM done and returns a new Result.
+     *
+     * @method ajax
+     * @param {String} DOM tagName for the new element
+     * @param {Object} DOM options
+     * @return {Result} Result objecto with the recently created object. after this your should use .appendTo('selector')
+     */
+    kink.create = function(tag,options){
+        return new Result([Element.create(tag,options)]);
     };
 
     window.kk = kink;
