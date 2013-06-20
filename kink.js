@@ -492,8 +492,14 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @public
      */
     Result.prototype.html = function(html){
-        if(html === undefined && this.arr.length===1){
-            return Element.textContent(this.result(0));
+        if(html === undefined){
+            var html = "";
+
+            this.each(function(elem){
+                html+=Element.textContent(elem).replace(/\n/g," ");
+            });
+
+            return html;
         }
 
         this.each(function(elem){
