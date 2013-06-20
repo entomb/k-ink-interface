@@ -235,7 +235,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      */
     Result.prototype.toggle = function(){
         this.each(function(elem){
-            Css.toggle(elem,boolState);
+            Css.toggle(elem);
         });
         return this;
     };
