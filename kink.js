@@ -549,15 +549,22 @@ Ink.createModule('Ink.Util.Kink',1,[
         return true;
     };
 
+
     /**
      * Alias of the Ink.Dom.Element.data
      *
      * @method data
+     * @param {String} Optional key, if not present the method will return the full Data element.
      * @return {Result} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.data = function(){
-        return Element.data(this.result(0));
+    Result.prototype.data = function(key){
+        if(key!==undefined){
+            var Data = Element.data(this.result(0));
+            return (Data[key]!==undefined) ? Data[key] : null
+        }else{
+            return Element.data(this.result(0));
+        }
     };
 
     /**
