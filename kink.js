@@ -274,17 +274,18 @@ Ink.createModule('Ink.Util.Kink',1,[
             cb = callback;
             callback = Ink.bindEvent(function( event ){
                 var elm = Event.element(event);
-                var context = Ink.ss(this.selector + ' ' + selector);
+                var context = this.find(selector);
 
                 var result = true;
-                if( context.indexOf(elm) === -1 ){
+                if( context.result().indexOf(elm) === -1 ){
                     result = context.some(
                         Ink.bind(function(elem){
                             return Ink.ss(elm.nodeName,elem).indexOf( elm )!==-1;
                         },this)
                     );
-                    if( !result )
+                    if( !result ){
                         return;
+                    }
                 }
 
                 if( result ){
