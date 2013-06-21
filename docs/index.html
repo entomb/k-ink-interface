@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>K(Ink) - a kinky way to interacto the ink.js framework</title>
+
+    <link rel="stylesheet" type="text/css" href="http://cdn.ink.sapo.pt/2.0.0/css/ink-min.css">
+    <link rel="stylesheet" type="text/css" href="https://google-code-prettify.googlecode.com/svn/trunk/styles/sunburst.css">
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/prettify.js"></script>
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/ink-ui.min.js"></script>
+    <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/autoload.js"></script>
+    <style>
+        ul li.title{
+            background-color: #FFF;
+        }
+        .content{
+            float:right;
+        }
+        ul li a{
+            font-size:.8em;
+        }
+    </style>
+</head>
+<body onload="prettyPrint()">
+    <div class="ink-grid">
+            <div class="column-group gutters">
+                <div class="sidebar large-20 medium-20 small-100">
+                    <header>
+                        <nav class="ink-navigation sticky">
+                            <ul class="docmenu menu vertical black">
+                                <li class="title">
+                                    <h1>
+                                        k(InK) <small>ink.js interface</small>
+                                    </h1>
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                </div>
+                <div class="large-80 medium-80 hide-small vspace">
+
+                </div>
+                <div class="large-80 medium-80 small-100 content">
+                    <h2>What is k(InK)</h2>
+                    <p>
+                        k(Ink) is a kinky way to interact with the <a href="http://github.com/sapo/ink.js">ink.js</a> library easing the pain of designers and developers alike when using the awesome <a href="http://github.com/sapo/ink.js">Ink css framework</a>.
+                    </p>
+                    <p>
+                        k(Ink) takes some of the functionality of the to the full fledged ink.js and creates a set of chainable methods and aliases, allowing for easy usage, fast implementation and code readability. The library comes in a small &lt;10kb minified file that works with the most recent Ink (v2) package.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+<script type="text/javascript" src="../kink.js"></script>
+<script type="text/javascript">
+    kk.ready(function(){
+        kk('.content').find('h2').each(function(elem){
+            var name  = kk(elem).html();
+            var perma = name.replace(/\s/g,"-");
+
+            kk(elem).id(perma);
+
+            kk('.sidebar ul').appendHTML("<li><a href='#"+perma+"'>"+name+"</a></li>");
+        });
+    });
+</script>
+</body>
+</html>
