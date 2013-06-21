@@ -267,7 +267,32 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @return {Result} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.on = Result.prototype.bind = function(ev,callback){
+    Result.prototype.on = Result.prototype.bind = function(ev,selector,callback){
+        if( typeof selector === 'function' ){
+            callback = selector;
+        } else {
+            cb = callback;
+            callback = Ink.bindEvent(function( event ){
+                var elm = Event.element(event);
+                var context = Ink.ss(this.selector + ' ' + selector);
+
+                var result = true;
+                if( context.indexOf(elm) === -1 ){
+                    result = context.some(
+                        Ink.bind(function(elem){
+                            return Ink.ss(elm.nodeName,elem).indexOf( elm )!==-1;
+                        },this)
+                    );
+                    if( !result )
+                        return;
+                }
+
+                if( result ){
+                    cb.call(this,event);
+                }
+            },this);
+        }
+
         if(callback === undefined){
             //call
             this.each(function(elem){
@@ -509,7 +534,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      */
     Result.prototype.html = function(html){
         if(html === undefined){
-            var html = "";
+            html = "";
 
             this.each(function(elem){
                 html+=Element.textContent(elem).replace(/\n/g," ");
@@ -583,7 +608,7 @@ Ink.createModule('Ink.Util.Kink',1,[
     Result.prototype.data = function(key){
         if(key!==undefined){
             var Data = Element.data(this.result(0));
-            return (Data[key]!==undefined) ? Data[key] : null
+            return (Data[key]!==undefined) ? Data[key] : null;
         }else{
             return Element.data(this.result(0));
         }
@@ -667,7 +692,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @public
      */
     Result.prototype.attr = Result.prototype.attribute = function(attr,value){
-        if(value!=undefined){
+        if(value !== undefined){
             this.each(function(elem){
                 elem.setAttribute(attr,value);
             });
@@ -687,7 +712,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      * @public
      */
     Result.prototype.value = Result.prototype.val = function(value){
-        if(value==undefined){
+        if(value === undefined){
             var elem = this.result(0);
             if(elem.nodeName=='SELECT'){
                 return elem.options[elem.selectedIndex].value;
@@ -865,7 +890,7 @@ Ink.createModule('Ink.Util.Kink',1,[
         }else if(param instanceof Array){
             return new Result(param);
         }if(param instanceof Result){
-            return new param;
+            return param;
         }else{
             return new Result([param]);
         }
@@ -910,7 +935,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      *
      * @method appendStylesheet
      */
-    kink.appendStylesheet = function(path,options){Css.appendStylesheet(path,options)};
+    kink.appendStylesheet = function(path,options){Css.appendStylesheet(path,options);};
 
     /**
      * Alias of the Ink.Dom.Browser
@@ -969,7 +994,7 @@ Ink.createModule('Ink.Util.Kink',1,[
             return true;
         }
         return false;
-    }
+    };
 
 
     /**
