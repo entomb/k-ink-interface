@@ -703,6 +703,45 @@ Ink.createModule('Ink.Util.Kink',1,[
         }
     };
 
+    /**
+     * Setter and getter for `name` attribute
+     *
+     * @method name
+     * @param {String} attr Name of the attribute to check if it exists in the element
+     * @return {Array} Returns an array of elements that have the attribute.
+     * @public
+     */
+    Result.prototype.name = function(value){
+        if(value !== undefined){
+            this.each(function(elem){
+                elem.setAttribute('name',value);
+            });
+            return this;
+        }else{
+            return this.result(0).getAttribute('name');
+        }
+    };
+
+
+    /**
+     * Setter and getter for `id` attribute
+     *
+     * @method id
+     * @param {String} attr Name of the attribute to check if it exists in the element
+     * @return {Array} Returns an array of elements that have the attribute.
+     * @public
+     */
+    Result.prototype.id = function(value){
+        if(value !== undefined){
+            this.each(function(elem){
+                elem.setAttribute('id',value);
+            });
+            return this;
+        }else{
+            return this.result(0).getAttribute('id');
+        }
+    };
+
 
      /**
      * Setter and getter for values
