@@ -689,7 +689,7 @@ Ink.createModule('Ink.Util.Kink',1,[
      *
      * @method attribute
      * @param {String} attr Name of the attribute to check if it exists in the element
-     * @return {Array} Returns an array of elements that have the attribute.
+     * @return {Array} Returns an array of elements that have the attribute or Result for chainning.
      * @public
      */
     Result.prototype.attr = Result.prototype.attribute = function(attr,value){
@@ -707,8 +707,8 @@ Ink.createModule('Ink.Util.Kink',1,[
      * Setter and getter for `name` attribute
      *
      * @method name
-     * @param {String} attr Name of the attribute to check if it exists in the element
-     * @return {Array} Returns an array of elements that have the attribute.
+     * @param {String} value value to set to the "name" attribute
+     * @return {Array|Result} Returns an array of elements that have the attribute or Result for chainning.
      * @public
      */
     Result.prototype.name = function(value){
@@ -727,8 +727,8 @@ Ink.createModule('Ink.Util.Kink',1,[
      * Setter and getter for `id` attribute
      *
      * @method id
-     * @param {String} attr Name of the attribute to check if it exists in the element
-     * @return {Array} Returns an array of elements that have the attribute.
+     * @param {String} value value to set to the "id" attribute
+     * @return {Array|Result} Returns an array of elements that have the attribute or Result for chainning.
      * @public
      */
     Result.prototype.id = function(value){
