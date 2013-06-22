@@ -83,20 +83,20 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     };
 
     /**
-     * @class Result
+     * @class kResult
      * @constructor
      * @version 1
      * @param {Array} resultArray   Array to be manipulated
      * @private
      */
-    var Result = function(resultArray,selector){
+    var kResult = function(resultArray,selector){
         this.selector = selector;
         this.arr = resultArray;
 
         this.get = function(i) {
             if(i === undefined) { i = 0; }
 
-            return new Result([this.arr[i]]);
+            return new kResult([this.arr[i]]);
         };
 
         this.result = function(i) {
@@ -105,6 +105,14 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }else{
                 return this.arr[i];
             }
+        };
+
+        this.last = function(i) { 
+            return new kResult([this.arr[this.arr.length-1]]);
+        };
+
+        this.first = function(i) { 
+            return new kResult([this.arr[0]]);
         };
 
         return this;
@@ -116,10 +124,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method each
      * @param {Function} iterator Callback to run for each item
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.each = function(iterator) {
+    kResult.prototype.each = function(iterator) {
         InkArray.each(this.arr,iterator);
         return this;
     };
@@ -131,12 +139,25 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @method some
      * @param {Function} iterator Callback to run for each item that will return true or false, specifying if the item should be
      * in the returned array
-     * @param {Object} [callable] Context in which the callback will run
+     * @param {Object} [context] Context in which the callback will run
      * @return {Array} Returns an array with the items where that the callback returned true.
      * @public
      */
-    Result.prototype.some = function(iterator,callable) {
-        return InkArray.some(this.arr,iterator,callable);
+    kResult.prototype.some = function(iterator,context) {
+        return InkArray.some(this.arr,iterator,context);
+    };
+
+
+    /**
+     * Kind of an Alias for the Ink.Util.Array.inArray method
+     *
+     * @method matches
+     * @param  {mixed} param the array to compare
+     * @return {Bool}
+     * @public
+     */
+    kResult.prototype.has = function(param) {
+        return InkArray.inArray(param,this.arr);
     };
 
 
@@ -146,10 +167,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method addClass
      * @param {String} className Class to be added to the element(s)
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.addClassName = Result.prototype.addClass = function(className){
+    kResult.prototype.addClassName = kResult.prototype.addClass = function(className){
         this.each(function(elem,key){
             Css.addClassName(elem,className);
         });
@@ -162,10 +183,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method removeClass
      * @param {String} className Class to be removed from the element(s)
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.removeClassName = Result.prototype.removeClass = function(className){
+    kResult.prototype.removeClassName = kResult.prototype.removeClass = function(className){
         this.each(function(elem,key){
             Css.removeClassName(elem,className);
         });
@@ -179,10 +200,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @method setClass
      * @param {String} className Class to be added/removed to/from the element(s)
      * @param {Boolean} boolState Flag that determines if the class should be added or removed
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.setClassName = Result.prototype.setClass = function(className,boolState){
+    kResult.prototype.setClassName = kResult.prototype.setClass = function(className,boolState){
         this.each(function(elem,key){
             Css.setClassName(elem,className,boolState);
         });
@@ -198,7 +219,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array with the elements that have the class.
      * @public
      */
-    Result.prototype.hasClassName = Result.prototype.hasClass = function(className){
+    kResult.prototype.hasClassName = kResult.prototype.hasClass = function(className){
         return this.some(function(elem,key){
             return Css.hasClassName(elem,className);
         });
@@ -209,10 +230,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding support for chaining.
      *
      * @method hide
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.hide = function(){
+    kResult.prototype.hide = function(){
          this.each(function(elem){
             Css.hide(elem);
         });
@@ -224,10 +245,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding support for chaining.
      *
      * @method show
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.show = function(){
+    kResult.prototype.show = function(){
         this.each(function(elem){
             Css.show(elem);
         });
@@ -240,10 +261,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method showHide
      * @param {Boolean} boolState Flag that determines if the element(s) should be showed or hidden
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.showHide = function(boolState){
+    kResult.prototype.showHide = function(boolState){
         this.each(function(elem){
             Css.showHide(elem,boolState);
         });
@@ -255,10 +276,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding support for chaining.
      *
      * @method toggle
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.toggle = function(){
+    kResult.prototype.toggle = function(){
         this.each(function(elem){
             Css.toggle(elem);
         });
@@ -271,10 +292,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method style
      * @param {String} inlineStyle Style string to be added to the element(s)' style attribute
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.style = Result.prototype.setStyle = function(inlineStyle){
+    kResult.prototype.style = kResult.prototype.setStyle = function(inlineStyle){
         this.each(function(elem){
             Css.setStyle(elem,inlineStyle);
         });
@@ -289,10 +310,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @method on
      * @param {String} ev Event to be triggered or listened.
      * @param {Function} [callback] Callback to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.on = Result.prototype.bind = function(ev,selector,callback){
+    kResult.prototype.on = kResult.prototype.bind = function(ev,selector,callback){
         if( typeof selector === 'function' ){
             callback = selector;
         } else {
@@ -341,10 +362,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @method live
      * @param {String} event Name of the event that was added on live()
      * @param {Function} callback Function/listener you want to run when the event is triggered.
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.live = function(event, callback){
+    kResult.prototype.live = function(event, callback){
         if( typeof(this.selector) !== 'string' ){
             return;
         }
@@ -371,10 +392,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @method die
      * @param {String} event Name of the event that was added on live()
      * @param {Function} [handler] Function/listener you want to remove. If you don't pass a handler, it will remove all listeners related with the specified event (and selector)
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.die = function(event, handler){
+    kResult.prototype.die = function(event, handler){
 
         if( typeof handler !== 'undefined' ){
 
@@ -410,10 +431,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method click
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.click = function(callback){
+    kResult.prototype.click = function(callback){
         return this.bind('click',callback);
     };
 
@@ -423,10 +444,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method dblclick
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.dblclick = function(callback){
+    kResult.prototype.dblclick = function(callback){
         return this.bind('dblclick',callback);
     };
 
@@ -437,10 +458,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method focus
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.focus = function(callback){
+    kResult.prototype.focus = function(callback){
         return this.bind('focus',callback);
     };
 
@@ -451,10 +472,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method blur
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.blur = function(callback){
+    kResult.prototype.blur = function(callback){
         return this.bind('blur',callback);
     };
 
@@ -465,10 +486,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method change
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.change = function(callback){
+    kResult.prototype.change = function(callback){
         return this.bind('change',callback);
     };
 
@@ -479,10 +500,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method mousemove
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.mousemove = function(callback){
+    kResult.prototype.mousemove = function(callback){
         return this.bind('mousemove',callback);
     };
 
@@ -492,10 +513,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method mouseover
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.mouseover = function(callback){
+    kResult.prototype.mouseover = function(callback){
         this.bind('mouseover',callback);
         return this;
     };
@@ -506,25 +527,25 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method mouseover
      * @param {Function} callback Callback function to be executed when the specified event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.mouseout = function(callback){
+    kResult.prototype.mouseout = function(callback){
         this.bind('mouseout',callback);
         return this;
     };
 
     /**
-     * Alias for the Result.mouseover and Result.mouseout methods
+     * Alias for the kResult.mouseover and kResult.mouseout methods
      * adding support for chaining.
      *
      * @method hover
      * @param {Function} callbackIn Callback function to be executed when the mouseover event is triggered
      * @param {Function} [callbackOut] Callback function to be executed when the mouseout event is triggered
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.hover = function(callbackIn,callbackOut){
+    kResult.prototype.hover = function(callbackIn,callbackOut){
         if(callbackOut === undefined){
             this.mouseover(callbackIn);
         }else{
@@ -539,10 +560,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method appendTo
      * @param {String} css selector to find an alement and append the current resultset to it, will append to the first element it finds
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.appendTo = function(select){
+    kResult.prototype.appendTo = function(select){
         this.each(function(elem){
             kink(select).result(0).appendChild(elem);
         });
@@ -555,10 +576,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method html
      * @param {String} html HTML to be written inside the element.
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.html = function(html){
+    kResult.prototype.html = function(html){
         if(html === undefined){
             html = "";
 
@@ -581,10 +602,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method appendHTML
      * @param {String} html HTML to be appended inside the element.
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.appendHTML = function(html){
+    kResult.prototype.appendHTML = function(html){
         this.each(function(elem){
             Element.appendHTML(elem,html);
         });
@@ -597,10 +618,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method prependHTML
      * @param {String} html HTML to be prepended inside the element.
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.prependHTML = function(html){
+    kResult.prototype.prependHTML = function(html){
 
         this.each(function(elem){
             Element.prependHTML(elem,html);
@@ -615,7 +636,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Boolean} Returns true.
      * @public
      */
-    Result.prototype.remove = function(){
+    kResult.prototype.remove = function(){
         this.each(function(elem){
             Element.remove(elem);
         });
@@ -628,10 +649,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method data
      * @param {String} Optional key, if not present the method will return the full Data element.
-     * @return {Result} Returns the same object to support chaining.
+     * @return {kResult} Returns the same object to support chaining.
      * @public
      */
-    Result.prototype.data = function(key){
+    kResult.prototype.data = function(key){
         if(key!==undefined){
             var Data = Element.data(this.result(0));
             return (Data[key]!==undefined) ? Data[key] : null;
@@ -647,7 +668,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array where the first position is the width and the second is the height of the element.
      * @public
      */
-    Result.prototype.size = Result.prototype.elementDimensions = function(){
+    kResult.prototype.size = kResult.prototype.elementDimensions = function(){
         return Element.elementDimensions(this.result(0));
     };
 
@@ -658,7 +679,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Number} Returns the height in pixels.
      * @public
      */
-    Result.prototype.height = Result.prototype.elementHeight = function(){
+    kResult.prototype.height = kResult.prototype.elementHeight = function(){
         return Element.elementHeight(this.result(0));
     };
 
@@ -669,7 +690,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Number} Returns the width of the element in pixels.
      * @public
      */
-    Result.prototype.width = Result.prototype.elementWidth = function(){
+    kResult.prototype.width = kResult.prototype.elementWidth = function(){
         return Element.elementWidth(this.result(0));
     };
 
@@ -680,7 +701,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element relative to the documents top left corner.
      * @public
      */
-    Result.prototype.absolutePosition = Result.prototype.offset = function(){
+    kResult.prototype.absolutePosition = kResult.prototype.offset = function(){
         return Element.offset(this.result(0));
     };
 
@@ -691,7 +712,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array where the first position is the x coordinate and the second is the y coordinate of the element in the viewport.
      * @public
      */
-    Result.prototype.position = Result.prototype.offset2 = function(){
+    kResult.prototype.position = kResult.prototype.offset2 = function(){
         return Element.offset2(this.result(0));
     };
 
@@ -703,7 +724,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array of elements that have the attribute.
      * @public
      */
-    Result.prototype.hasAttribute = function(attr){
+    kResult.prototype.hasAttribute = function(attr){
         return this.some(function(elem){
             return Element.hasAttribute(elem,attr);
         });
@@ -714,10 +735,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method attribute
      * @param {String} attr Name of the attribute to check if it exists in the element
-     * @return {Array} Returns an array of elements that have the attribute or Result for chainning.
+     * @return {Array} Returns an array of elements that have the attribute or kResult for chainning.
      * @public
      */
-    Result.prototype.attr = Result.prototype.attribute = function(attr,value){
+    kResult.prototype.attr = kResult.prototype.attribute = function(attr,value){
         if(value !== undefined){
             this.each(function(elem){
                 elem.setAttribute(attr,value);
@@ -733,10 +754,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method name
      * @param {String} value value to set to the "name" attribute
-     * @return {Array|Result} Returns an array of elements that have the attribute or Result for chainning.
+     * @return {Array|kResult} Returns an array of elements that have the attribute or kResult for chainning.
      * @public
      */
-    Result.prototype.name = function(value){
+    kResult.prototype.name = function(value){
         if(value !== undefined){
             this.each(function(elem){
                 elem.setAttribute('name',value);
@@ -753,10 +774,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method id
      * @param {String} value value to set to the "id" attribute
-     * @return {Array|Result} Returns an array of elements that have the attribute or Result for chainning.
+     * @return {Array|kResult} Returns an array of elements that have the attribute or kResult for chainning.
      * @public
      */
-    Result.prototype.id = function(value){
+    kResult.prototype.id = function(value){
         if(value !== undefined){
             this.each(function(elem){
                 elem.setAttribute('id',value);
@@ -773,10 +794,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method attribute
      * @param {String} value the value to set. if on a <select> it will select the option with this value.
-     * @return {String|Result} trows an onChange() event on all elements or returns the value.
+     * @return {String|kResult} trows an onChange() event on all elements or returns the value.
      * @public
      */
-    Result.prototype.value = Result.prototype.val = function(value){
+    kResult.prototype.value = kResult.prototype.val = function(value){
         if(value === undefined){
             var elem = this.result(0);
             if(elem.nodeName=='SELECT'){
@@ -819,7 +840,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Array} Returns an array where the first position is the horizontal scroll position and the second is the vertical scroll position.
      * @public
      */
-    Result.prototype.scroll = function(){
+    kResult.prototype.scroll = function(){
         return Element.scroll(this.result(0));
     };
 
@@ -827,10 +848,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * Alias of the Ink.Dom.Element.scrollTo
      *
      * @method scrollTo
-     * @return {Result} Scrolls to the element.
+     * @return {kResult} Scrolls to the element.
      * @public
      */
-    Result.prototype.scrollTo = function(){
+    kResult.prototype.scrollTo = function(){
         return Element.scrollTo(this.result(0));
     };
 
@@ -839,11 +860,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method siblings
-     * @return {Result} Returns a new Result object with an array of siblings.
+     * @return {kResult} Returns a new kResult object with an array of siblings.
      * @public
      */
-    Result.prototype.siblings = function(){
-        return new Result(Element.siblings(this.result(0)));
+    kResult.prototype.siblings = function(){
+        return new kResult(Element.siblings(this.result(0)));
     };
 
 
@@ -852,11 +873,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method next
-     * @return {Result} Returns a new Result object with an array[1] witgh the next sibling.
+     * @return {kResult} Returns a new kResult object with an array[1] witgh the next sibling.
      * @public
      */
-    Result.prototype.next = function(){
-        return new Result([Element.nextElementSibling(this.result(0))]);
+    kResult.prototype.next = function(){
+        return new kResult([Element.nextElementSibling(this.result(0))]);
     };
 
 
@@ -865,11 +886,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method prev
-     * @return {Result} Returns a new Result object with an array[1] witgh the previsous sibling.
+     * @return {kResult} Returns a new kResult object with an array[1] witgh the previsous sibling.
      * @public
      */
-    Result.prototype.prev = function(){
-        return new Result([Element.previousElementSibling(this.result(0))]);
+    kResult.prototype.prev = function(){
+        return new kResult([Element.previousElementSibling(this.result(0))]);
     };
 
     /**
@@ -877,10 +898,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method parentNode
-     * @return {Result} Returns a new Result object with an array with the parentNode.
+     * @return {kResult} Returns a new kResult object with an array with the parentNode.
      * @public
      */
-    Result.prototype.parent = function(){
+    kResult.prototype.parent = function(){
         var parents = [];
         this.each(function(elem,num){
             if(!Ink.Util.Array.inArray(elem.parentNode,parents)){
@@ -891,7 +912,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         //unique?
         //Using Ink.Util.Array.inArray instead
         //parents.filter(function (e,i,arr) { return arr.lastIndexOf(e) === i; });
-        return new Result(parents);
+        return new kResult(parents);
     };
 
     /**
@@ -899,22 +920,22 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method childs
      * @param {Number} [i] Index of the specific item in the array of children nodes.
-     * @return {Result} Returns a new Result object with the array of childrens.
+     * @return {kResult} Returns a new kResult object with the array of childrens.
      * @public
      */
-    Result.prototype.childs = function(i){
+    kResult.prototype.childs = function(i){
         var fetchedChilds = [];
         this.each(function(elem){
             var collection = InkArray.convert(elem.children);
-            var childs = new Result(collection);
+            var childs = new kResult(collection);
             childs.each(function(childElem){
                 fetchedChilds.push(childElem);
             });
         });
         if(typeof i !== 'number' && !i){
-            return new Result(fetchedChilds);
+            return new kResult(fetchedChilds);
         }else{
-            return new Result(fetchedChilds).get(i);
+            return new kResult(fetchedChilds).get(i);
         }
     };
 
@@ -924,42 +945,42 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method find
      * @param {String} param CSS Selector.
-     * @return {Result} Returns a new Result object with the elements found.
+     * @return {kResult} Returns a new kResult object with the elements found.
      * @public
      */
-    Result.prototype.find = function(param){
+    kResult.prototype.find = function(param){
         var foundElements = [];
 
         this.each(function(elem){
-            var elements = new Result(Selector.select(param,elem));
+            var elements = new kResult(Selector.select(param,elem));
             elements.each(function(childElem){
                 foundElements.push(childElem);
             });
         });
 
-        return new Result(foundElements);
+        return new kResult(foundElements);
     };
 
     /**
-     * The 'kink' object is in the base of the usage of the Result class
+     * The 'kink' object is in the base of the usage of the kResult class
      *
      * @function kink
      * @param {String} param CSS Selector.
      * @param {String} [context] Context in which the selector will act.
-     * @return {Result} Returns a new Result object with the elements found.
+     * @return {kResult} Returns a new kResult object with the elements found.
      * @public
      */
     var kink = function(param,context){
         if(typeof param === 'string'){
-            return new Result(Selector.select(param,context),param);
+            return new kResult(Selector.select(param,context),param);
         }else if(param instanceof Array){
-            return new Result(param);
+            return new kResult(param);
         }else if(param instanceof Function){
             return new kink(param(context));
-        }if(param instanceof Result){
+        }if(param instanceof kResult){
             return param;
         }else{
-            return new Result([param]);
+            return new kResult([param]);
         }
     };
 
@@ -1053,11 +1074,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method extend
      * @param {String} method the new method/function name
-     * @param {Function} callable  the new method function, scope of 'this' will be the Result obj
+     * @param {Function} callable  the new method function, scope of 'this' will be the kResult obj
      */
     kink.extend = function(method,callable){
-        if(Result.prototype[method]===undefined){
-            Result.prototype[method] = callable;
+        if(kResult.prototype[method]===undefined){
+            kResult.prototype[method] = callable;
             return true;
         }
         return false;
@@ -1091,17 +1112,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
     /**
      * Alias of the Element.create
-     * Creates a new DOM done and returns a new Result.
+     * Creates a new DOM done and returns a new kResult.
      *
      * @method ajax
      * @param {String} DOM tagName for the new element
      * @param {Object} DOM options
-     * @return {Result} Result objecto with the recently created object. after this your should use .appendTo('selector')
+     * @return {kResult} kResult objecto with the recently created object. after this your should use .appendTo('selector')
      */
     kink.create = function(tag,options){
-        return new Result([Element.create(tag,options)]);
+        return new kResult([Element.create(tag,options)]);
     };
 
+    window.kResult = kResult;
     window.kk = kink;
     return kink;
 });
