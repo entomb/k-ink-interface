@@ -10,7 +10,7 @@ How does it work
 
 Lets say you want to create a dinamically generated menu. you prepare a script in JS that reads all the `div.content` elements and uses the content of the first `H2` as a title and then insejcts the `.sidebar` with links to the content. simple hum?
 
-Lets see how that`s done using Ink.js
+Lets see how to do this using Ink.js
 
 ```js
 Ink.Dom.Loaded.run(function(){
