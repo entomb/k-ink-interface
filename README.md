@@ -35,7 +35,7 @@ Ok... not that hard... how would someone who isn`t a full time javascript develo
 Enter __k(Ink)__, a small wrapper for the Ink.js framework.
 __k(Ink)__ does not add or remove any of Ink.js functionality, it`s a simple wrapper for the many methods and classes present on Ink allowing for chained calls with a simple human API. 
 
-Check out the exact same functionality, but now using k(Ink)
+Check out the exact same functionality, but now using __k(Ink)__
 ```js
 //find every h2 under the class .content
 kk('.content').find('h2').each(function(elem){
@@ -56,7 +56,9 @@ Instalation
 ===========
 
 __k(Ink)__ is built as a Ink.js module, So the requirements are the [Ink.js core](http://ink.sapo.pt/js/core).
-after this you just need to include it on your script and it will load the dependencies. Its recommended that you use Ink-all.js so your page doesn't clutter with dependencie requests, bur for now __k(Ink)__ does not offer any wrapper for the Ink-UI modules.
+after this you just need to include it on your script and it will load the dependencies. 
+Its recommended that you use Ink-all.js so your page doesn`t clutter with dependency requests, 
+bur for now __k(Ink)__ does not offer any wrapper for the Ink-UI modules.
 
 ```html
 <script type="text/javascript" src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
@@ -68,7 +70,9 @@ The kink (kk) Object
 ====================
 
 
-The kink object, by default assigned to `kk` is the main selector and wrapper. It allways returns a kResult Object that can then be manipulated using the API. _Full API documentation is under construction._
+The kink object, by default assigned to `kk` is the main selector and wrapper. 
+It allways returns a kResult Object that can then be manipulated using the API.
+_Full API documentation is under construction._
 
 
 Kink accepts many inputs, depending on your needs
