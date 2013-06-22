@@ -111,7 +111,7 @@ kk(function(context){
 
 Licence
 =======
-k(Ink) is under the [MIT licence}(http://opensource.org/licenses/MIT), so feel free to use, modify and contribute to its code
+k(Ink) is under the [MIT licence](http://opensource.org/licenses/MIT), so feel free to use, modify and contribute to its code
 
 
 
