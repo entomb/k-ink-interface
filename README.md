@@ -52,8 +52,8 @@ kk('.content').find('h2').each(function(elem){
 Looks Familiar... ?
 
 
-Instalation
-===========
+Installation
+============
 
 __k(Ink)__ is built as a Ink.js module, So the requirements are the [Ink.js core](http://ink.sapo.pt/js/core).
 after this you just need to include it on your script and it will load the dependencies. 
@@ -70,7 +70,7 @@ The kink (kk) Object
 ====================
 
 
-The kink object, by default assigned to `kk` is the main selector and wrapper. 
+The kink object, by default assigned to `kk`, is the main selector and wrapper. 
 It allways returns a kResult Object that can then be manipulated using the API.
 _Full API documentation is under construction._
 
