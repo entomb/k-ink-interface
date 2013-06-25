@@ -3,7 +3,7 @@
  * @author entomb ( https://github.com/entomb/k-ink-interface ) and ported by inkdev AT sapo.pt
  * @version 1
  *
- * @license http://opensource.org/licenses/MIT 
+ * @license http://opensource.org/licenses/MIT
 
 The MIT License (MIT)
 
@@ -107,11 +107,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         };
 
-        this.last = function(i) { 
+        this.last = function(i) {
             return new kResult([this.arr[this.arr.length-1]]);
         };
 
-        this.first = function(i) { 
+        this.first = function(i) {
             return new kResult([this.arr[0]]);
         };
 
@@ -166,14 +166,22 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding support for chaining.
      *
      * @method addClass
-     * @param {String} className Class to be added to the element(s)
+     * @param {String|Array} className Class  or array of Classes to be added to the element(s)
      * @return {kResult} Returns the same object to support chaining.
      * @public
      */
     kResult.prototype.addClassName = kResult.prototype.addClass = function(className){
-        this.each(function(elem,key){
-            Css.addClassName(elem,className);
+
+        this.each(function(elem){
+            if(className instanceof Array){
+                kink(className).each(function(iclass){
+                    Css.addClassName(elem,iclass);
+                })
+            }else{
+                Css.addClassName(elem,className);
+            }
         });
+
         return this;
     };
 
@@ -182,14 +190,24 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding support for chaining.
      *
      * @method removeClass
-     * @param {String} className Class to be removed from the element(s)
+     * @param {String|Array|undefined} className Class or array of Classes to be removed from the element(s). if undefined will remove all classes
      * @return {kResult} Returns the same object to support chaining.
      * @public
      */
     kResult.prototype.removeClassName = kResult.prototype.removeClass = function(className){
-        this.each(function(elem,key){
-            Css.removeClassName(elem,className);
+
+        this.each(function(elem){
+            if(className===undefined ){
+                elem.className=null;
+            }else if(className instanceof Array){
+                kink(className).each(function(iclass){
+                    Css.removeClassName(elem,iclass);
+                });
+            }else{
+                Css.removeClassName(elem,className);
+            }
         });
+
         return this;
     };
 
