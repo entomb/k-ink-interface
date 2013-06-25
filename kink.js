@@ -322,6 +322,26 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
+     * Alias for the Ink.Dom.Css.setStyle and Ink.Dom.Css.getStyle
+     * adding support for chaining.
+     *
+     * @method css
+     * @param {String} prop property to set or get
+     * @param {String} Optional value value to set
+     * @return {kResult|mixed} Returns the same object to support chaining or the style value
+     * @public
+     */
+    kResult.prototype.css = function(prop,value){
+        if(value===undefined){
+            return Css.getStyle(this.result(0),prop);
+        }else{
+            this.setStyle(prop+":"+value);
+        }
+        return this;
+    };
+
+
+    /**
      * Alias for the Ink.Dom.Event.observe and Ink.Dom.Event.fire methods
      * adding support for chaining.
      *
