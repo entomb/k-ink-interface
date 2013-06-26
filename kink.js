@@ -149,15 +149,28 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * Kind of an Alias for the Ink.Util.Array.inArray method
+     * Kind of an Alias for the Ink.Util.Array.inArray method (result has param)
      *
-     * @method matches
+     * @method has
      * @param  {mixed} param the array to compare
      * @return {Bool}
      * @public
      */
     kResult.prototype.has = function(param) {
         return InkArray.inArray(param,this.arr);
+    };
+
+
+    /**
+     * Kind of an Alias for the Ink.Util.Array.inArray method (param has first result)
+     *
+     * @method is
+     * @param  {mixed} selector to fetch a result to compare
+     * @return {Bool}
+     * @public
+     */
+    kResult.prototype.is = function(param) {
+        return InkArray.inArray(this.result(0),kk(param).result());
     };
 
 
