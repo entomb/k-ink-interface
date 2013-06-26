@@ -700,11 +700,17 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      *
      * @method data
      * @param {String} Optional key, if not present the method will return the full Data element.
-     * @return {kResult} Returns the same object to support chaining.
+     * @param {String} Optional value, if present the method set the data attribute
+     * @return {kResult} Returns the same object to support chaining or the dataset of the element.
      * @public
      */
-    kResult.prototype.data = function(key){
-        if(key!==undefined){
+    kResult.prototype.data = function(key,value){
+        if(key!==undefined && value!==undefined){
+            this.each(function(elem){
+                kink(elem).attr('data-'+key,value);
+            });
+            return this;
+        }else if(key!==undefined){
             var Data = Element.data(this.result(0));
             return (Data[key]!==undefined) ? Data[key] : null;
         }else{
