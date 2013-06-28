@@ -621,6 +621,23 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         return this;
     };
 
+    /**
+     * creates and append an element to all the result set
+     *
+     * @method create
+     * @uses kink.create()
+     * @param {String} DOM tagName for the new element
+     * @param {Object} DOM options
+     * @return {kResult} Returns the same object to support chaining.
+     * @public
+     */
+    kResult.prototype.create = function(tag,options){
+        this.each(function(elem){
+            kink.create(tag,options).appendTo(elem)
+        });
+        return this;
+    };
+
 
     /**
      * Sets the HTML of elements.
