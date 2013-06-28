@@ -132,6 +132,21 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         return this;
     };
 
+
+    /**
+     * Alias for Array.filter
+     * adding support for chaining.
+     *
+     * @method filter
+     * @param {Function} iterator Callback to run for each item. must return true or false
+     * @return {kResult} Returns the same object to support chaining.
+     * @public
+     */
+    kResult.prototype.filter = function(iterator) {
+        this.arr = this.arr.filter(iterator);
+        return this;
+    };
+
     /**
      * Alias for the Ink.Util.Array.some method
      * adding support for chaining.
