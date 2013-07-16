@@ -172,7 +172,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.has = function(param) {
-        return InkArray.inArray(param,this.arr);
+        return InkArray.inArray(kk(param).result(0),this.arr);
     };
 
 
@@ -380,33 +380,36 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.on = kResult.prototype.bind = function(ev,selector,callback){
-        if( typeof selector === 'function' ){
-            callback = selector;
-        } else {
-            cb = callback;
-            callback = Ink.bindEvent(function( event ){
-                var elm = Event.element(event);
-                var context = this.find(selector);
+        if(selector!==undefined){
+            if(typeof selector === 'function'){
+                callback = selector;
+            } else {
+                cb = callback;
+                callback = Ink.bindEvent(function( event ){
+                    var elm = Event.element(event);
+                    var context = this.find(selector);
 
-                var result = true;
-                if( context.result().indexOf(elm) === -1 ){
-                    result = context.some(
-                        Ink.bind(function(elem){
-                            return Ink.ss(elm.nodeName,elem).indexOf( elm )!==-1;
-                        },this)
-                    );
-                    if( !result ){
-                        return;
+                    var result = true;
+                    if( context.result().indexOf(elm) === -1 ){
+                        result = context.some(
+                            Ink.bind(function(elem){
+                                return Ink.ss(elm.nodeName,elem).indexOf( elm )!==-1;
+                            },this)
+                        );
+                        if( !result ){
+                            return;
+                        }
                     }
-                }
 
-                if( result ){
-                    cb.call(this,event);
-                }
-            },this);
+                    if( result ){
+                        cb.call(this,event,elm);
+                    }
+                },this);
+            }
         }
 
         if(callback === undefined){
+
             //call
             this.each(function(elem){
                 Event.fire(elem,ev);
