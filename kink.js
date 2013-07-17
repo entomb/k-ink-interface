@@ -1068,7 +1068,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         }else if(param instanceof Array){
             return new kResult(param);
         }else if(param instanceof Function){
-            return new kink(param(context));
+            return new kink(param.call(context));
         }if(param instanceof kResult){
             return param;
         }else{
