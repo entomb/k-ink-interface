@@ -91,7 +91,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     var kResult = function(resultArray,selector){
         this.selector = selector || false;
-        this.arr = resultArray || [];
+        if(resultArray instanceof Array){
+            this.arr = resultArray || [];
+        }else{
+            return kink(resultArray);
+        }
+
 
         this.get = function(i) {
             if(i === undefined) { i = 0; }
