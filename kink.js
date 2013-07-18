@@ -90,8 +90,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @private
      */
     var kResult = function(resultArray,selector){
-        this.selector = selector;
-        this.arr = resultArray;
+        this.selector = selector || false;
+        this.arr = resultArray || [];
 
         this.get = function(i) {
             if(i === undefined) { i = 0; }
@@ -1063,7 +1063,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     var kink = function(param,context){
-        if(typeof param === 'string'){
+        if(!param || param === null || param===undefined){
+            return new kResult([]);
+        }else if(typeof param === 'string'){
             return new kResult(Selector.select(param,context),param);
         }else if(param instanceof Array){
             return new kResult(param);
