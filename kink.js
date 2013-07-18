@@ -969,7 +969,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.next = function(){
-        return new kResult([Element.nextElementSibling(this.result(0))]);
+        return new kResult(Element.nextElementSibling(this.result(0)));
     };
 
 
@@ -982,7 +982,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.prev = function(){
-        return new kResult([Element.previousElementSibling(this.result(0))]);
+        return new kResult(Element.previousElementSibling(this.result(0)));
     };
 
     /**
