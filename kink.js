@@ -209,7 +209,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             if(className instanceof Array){
                 kink(className).each(function(iclass){
                     Css.addClassName(elem,iclass);
-                })
+                });
             }else{
                 Css.addClassName(elem,className);
             }
@@ -656,7 +656,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.create = function(tag,options){
         this.each(function(elem){
-            kink.create(tag,options).appendTo(elem)
+            kink.create(tag,options).appendTo(elem);
         });
         return this;
     };
@@ -842,7 +842,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             });
             return this;
         }else{
-            return this.result(0).getAttribute(attr);
+            if(this.result(0)){
+                return this.result(0).getAttribute(attr);
+            }else{
+                return null;
+            }
+
         }
     };
 
@@ -861,7 +866,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             });
             return this;
         }else{
-            return this.result(0).getAttribute('name');
+            if(this.result(0)){
+                return this.result(0).getAttribute('name');
+            }else{
+                return null;
+            }
         }
     };
 
@@ -881,7 +890,26 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             });
             return this;
         }else{
-            return this.result(0).getAttribute('id');
+            if(this.result(0)){
+                return this.result(0).getAttribute('id');
+            }else{
+                return null
+            }
+        }
+    };
+
+    /**
+     *  getter for the element tagName (will allways return UpperCase)
+     *
+     * @method tag
+     * @return {string} returns an uppercase tag name for the first element found
+     * @public
+     */
+    kResult.prototype.tag = function(){
+        if(this.result(0)){
+            return this.result(0).nodeName.toUpperCase();
+        }else{
+            return null;
         }
     };
 
