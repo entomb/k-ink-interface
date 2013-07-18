@@ -961,7 +961,14 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.siblings = function(){
-        return new kResult(Element.siblings(this.result(0)));
+        var foundElements = []
+        this.each(function(elem){
+            var elemFilter = Element.siblings(elem);
+            if(elemFilter && !Ink.Util.Array.inArray(elemFilter,foundElements)){
+                foundElements.push(elemFilter);
+            }
+        });
+        return new kResult(foundElements);
     };
 
 
@@ -970,11 +977,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method next
-     * @return {kResult} Returns a new kResult object with an array[1] witgh the next sibling.
+     * @return {kResult} Returns a new kResult object with an array of all the next siblings.
      * @public
      */
     kResult.prototype.next = function(){
-        return new kResult(Element.nextElementSibling(this.result(0)));
+        var foundElements = []
+        this.each(function(elem){
+            var elemFilter = Element.nextElementSibling(elem);
+            if(elemFilter && !Ink.Util.Array.inArray(elemFilter,foundElements)){
+                foundElements.push(elemFilter);
+            }
+        });
+        return new kResult(foundElements);
     };
 
 
@@ -983,11 +997,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method prev
-     * @return {kResult} Returns a new kResult object with an array[1] witgh the previsous sibling.
+     * @return {kResult} Returns a new kResult object with an array of all the previsous sibling.
      * @public
      */
     kResult.prototype.prev = function(){
-        return new kResult(Element.previousElementSibling(this.result(0)));
+        var foundElements = []
+        this.each(function(elem){
+            var elemFilter = Element.previousElementSibling(elem);
+            if(elemFilter && !Ink.Util.Array.inArray(elemFilter,foundElements)){
+                foundElements.push(elemFilter);
+            }
+        });
+        return new kResult(foundElements);
     };
 
     /**
@@ -995,7 +1016,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * adding chaining support.
      *
      * @method parentNode
-     * @return {kResult} Returns a new kResult object with an array with the parentNode.
+     * @return {kResult} Returns a new kResult object with an array with of parentNodes.
      * @public
      */
     kResult.prototype.parent = function(){
