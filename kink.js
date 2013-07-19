@@ -389,7 +389,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.css = function(prop,value){
         //preventing type errors
-        if(typeof this.result(0) != "object" || !this.result(0).hasAttribute('style')){
+        if(typeof this.result(0) != "object" || !this.result(0).hasOwnProperty('style')){
             return false;
         }
         if(value===undefined){
