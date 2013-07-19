@@ -288,6 +288,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     };
 
     /**
+     * Will check if the first element is visible and return its state
+     *
+     * @method visible
+     * @return {bool} State of visibilty based on (display:none) OR (opacity:0) OR (visibility:hidden)
+     * @public
+     */
+    kResult.prototype.visible = function(){
+        return (this.css('display')!="none" && this.css('opacity')>0 && this.css('visibility')!= "hidden");
+    };
+
+
+    /**
      * Alias for the Ink.Dom.Css.hide method
      * adding support for chaining.
      *
