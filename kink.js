@@ -124,6 +124,17 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     };
 
     /**
+     * returns how many elements are on the resultset
+     *
+     * @method length 
+     * @return {int} length of the result array
+     * @public
+     */
+    kResult.prototype.length = function() { 
+        return this.arr.length;
+    };
+
+    /**
      * Alias for the Ink.Util.Array.each method
      * adding support for chaining.
      *
