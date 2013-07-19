@@ -35,40 +35,50 @@
   <script src="../kink.js"></script>
   <script>
 
-    var tester = document.getElementById('tester');
+     var tester = document.getElementById('tester');
+     var ul1 = document.getElementById('ul1');
+     var ul2 = document.getElementById('ul2');
+     var li1  = document.getElementById('li1');
+     var li2  = document.getElementById('li2');
+     var li3  = document.getElementById('li3');
+     var li4  = document.getElementById('li4');
+     var li5  = document.getElementById('li5');
+     var li6  = document.getElementById('li6');
+     var li7  = document.getElementById('li7');
+     var li8  = document.getElementById('li8');
+     var li9  = document.getElementById('li9');
+     var li10 = document.getElementById('li10');
+     var li11 = document.getElementById('li11');
+     var a1   = document.getElementById('a1');
+     var a2   = document.getElementById('a2');
+     var a3   = document.getElementById('a3');
+     var a4   = document.getElementById('a4');
+     var a5   = document.getElementById('a5');
+     var a6   = document.getElementById('a6');
+     var a7   = document.getElementById('a7');
+     var a8   = document.getElementById('a8');
+     var a9   = document.getElementById('a9');
+     var a10  = document.getElementById('a10');
+     var allLi1 = [li1,li2,li3,li4,li5,li6];
+     var allLi2 = [li7,li8,li9,li10,li11];
+     var allLi = [li1,li2,li3,li4,li5,li6,li7,li8,li9,li10,li11];
+     var allA = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10];
 
-    var ul1 = document.getElementById('ul1');
-    var ul2 = document.getElementById('ul2');
+    console.log("+-------------------------------+");
+    console.log("+ Running unit tests for k(Ink) +")
+    console.log("+-------------------------------+");
+    console.log("   (✔/✖) [module name] ");
+    console.log("--------------------------------");
+    QUnit.testDone(function(r) {
 
-    var li1  = document.getElementById('li1');
-    var li2  = document.getElementById('li2');
-    var li3  = document.getElementById('li3');
-    var li4  = document.getElementById('li4');
-    var li5  = document.getElementById('li5');
-    var li6  = document.getElementById('li6');
-    var li7  = document.getElementById('li7');
-    var li8  = document.getElementById('li8');
-    var li9  = document.getElementById('li9');
-    var li10 = document.getElementById('li10');
-    var li11 = document.getElementById('li11');
+        if(r.failed==0){
+          var sign = "\033[32m ✔\033[0m";
+        }else{
+          var sign = "\033[31m ✖\033[0m";;
+        }
 
-    var a1   = document.getElementById('a1');
-    var a2   = document.getElementById('a2');
-    var a3   = document.getElementById('a3');
-    var a4   = document.getElementById('a4');
-    var a5   = document.getElementById('a5');
-    var a6   = document.getElementById('a6');
-    var a7   = document.getElementById('a7');
-    var a8   = document.getElementById('a8');
-    var a9   = document.getElementById('a9');
-    var a10  = document.getElementById('a10');
-
-
-    var allLi1 = [li1,li2,li3,li4,li5,li6];
-    var allLi2 = [li7,li8,li9,li10,li11];
-    var allLi = [li1,li2,li3,li4,li5,li6,li7,li8,li9,li10,li11];
-    var allA = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10];
-
+        console.log(sign+" ("+r.passed+"/"+r.failed+")"+" [\033[36m"+r.module+"\033[0m] "+r.name);
+    });
 
     module('configuration');
     test( "tests are not stupid", 6,function() {
@@ -86,6 +96,7 @@
 
 
       deepEqual( {a:1,b:2,c:3} ,{a:1,b:2,c:3}, "object compare" );
+
 
     });
 
@@ -225,7 +236,7 @@
       equal(kk('#a2').parent().result(0), li2, "correct single parents li<a");
 
       equal(kk('#li8').parent().result(0), ul2, "correct single parents ul<li");
-      
+
       equal(kk('#a1').parent().parent().result(0), ul1, "nesting single parents ul<li<a");
 
       deepEqual(kk('#a1,#a10').parent().parent().result(), [ul1,ul2], "nesting multi parents ul<li<a");
