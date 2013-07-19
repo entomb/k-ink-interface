@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
   <style type="text/css">
     #tester{display: none}
+    #tester_inputs{display: none}
   </style>
 </head>
 <body>
@@ -28,7 +29,25 @@
         </ul>
       </li>
     </ul>
+  </div>
+  <div id="tester_inputs">
+    <select id="select1">
+      <option value="1" id="opt1" selected>opt1</option>
+      <option value="2" id="opt2">opt2</option>
+      <option value="3" id="opt3">opt3</option>
+      <option value="4" id="opt4">opt4</option>
+      <option value="5" id="opt5">opt5</option>
+    </select>
+    <input type="text" value="textinput1" id="input1"/>
+    <input type="text" value="textinput2" id="input2"/>
 
+    <input type="checkbox" value="1" checked="checked" id="check1"/>
+    <input type="checkbox" value="2" id="check2"/>
+
+    <input type="radio" value="3" checked="checked" id="radio1"/>
+    <input type="radio" value="4" id="radio2"/>
+
+    <textarea id="textarea1">this is a big html text</textarea>
   </div>
   <script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
   <script src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
@@ -36,8 +55,11 @@
   <script>
 
      var tester = document.getElementById('tester');
+     var tester_inputs = document.getElementById('tester_inputs');
+
      var ul1 = document.getElementById('ul1');
      var ul2 = document.getElementById('ul2');
+
      var li1  = document.getElementById('li1');
      var li2  = document.getElementById('li2');
      var li3  = document.getElementById('li3');
@@ -49,6 +71,7 @@
      var li9  = document.getElementById('li9');
      var li10 = document.getElementById('li10');
      var li11 = document.getElementById('li11');
+
      var a1   = document.getElementById('a1');
      var a2   = document.getElementById('a2');
      var a3   = document.getElementById('a3');
@@ -59,6 +82,19 @@
      var a8   = document.getElementById('a8');
      var a9   = document.getElementById('a9');
      var a10  = document.getElementById('a10');
+
+     var select1 = document.getElementById('select1');
+     var opt1 = document.getElementById('opt1');
+     var opt2 = document.getElementById('opt2');
+     var opt3 = document.getElementById('opt3');
+     var opt4 = document.getElementById('opt4');
+     var opt5 = document.getElementById('opt5');
+     var input1 = document.getElementById('input1');
+     var input2 = document.getElementById('input2');
+     var check1 = document.getElementById('check1');
+     var check2 = document.getElementById('check2');
+     var textarea1 = document.getElementById('textarea1');
+
      var allLi1 = [li1,li2,li3,li4,li5,li6];
      var allLi2 = [li7,li8,li9,li10,li11];
      var allLi = [li1,li2,li3,li4,li5,li6,li7,li8,li9,li10,li11];
@@ -348,6 +384,125 @@
       ok(!kk(".item").is("ul li"), ".item is in ul>li (false)");
 
     });
+
+    module("events");
+    test('bind() and alias', function(){
+
+      var fnEvent = function(){
+        watcher++;
+      };
+
+      var watcher=0;
+
+      kk("#li2").click(fnEvent).click();
+
+      equal(watcher, 1,".click() on single item");
+
+
+      kk(".first").click(fnEvent);
+
+      var watcher = 0;
+      kk('#li1').click();
+      kk('#li7').click();
+
+      equal(watcher, 2,".click() on multi item");
+
+      kk("ul").bind('click','.last',fnEvent);
+
+      var watcher = 0;
+      kk("#li6").click();
+      kk("#li11").click(); //should count 2 because its inside li6
+
+
+      equal(watcher, 3,".click() using scope selector");
+
+
+      var watcher = 0;
+      kk("#li2").click();
+      equal(watcher, 1,"firing 1st events again using .click()");
+
+      var watcher = 0;
+      kk("#li1").click();
+      equal(watcher, 1,"firing 2nd events again using .click()");
+
+      var watcher = 0;
+      kk("#a1").hover(fnEvent,fnEvent);
+
+      kk('#a1').on('mouseover');
+      kk('#a1').on('mouseout');
+
+      equal(watcher, 2,".hover() in and out");
+
+    });
+
+
+  module("DOM");
+  test('.html()',function(){
+
+    equal(kk('#a2').html(), 'link2', "get simple html content");
+
+    equal(kk('#li1').html(), 'link1', "get childs html content");
+
+    equal(kk('#a1').html('testing1').html(), 'testing1', "set simple html content");
+
+    equal(kk('.first').html(), 'testing1sublink', "should concat all html from all childs of first element");
+
+  });
+
+  test('.val()',function(){
+    var changeMarker = 0;
+
+    kk('#input1,#check1,#check2,#select1,#textarea1').change(function(){
+      changeMarker++;
+    });
+
+    equal(kk('#input1').val(), 'textinput1', "get from <input>");
+    equal(kk('#input1').val('anotherinput').val(), 'anotherinput', "set for <input>");
+
+
+    equal(kk('#select1').val(), '1', "get from <select>");
+    equal(kk('#select1').val(2).val(), '2', "set for <select>");
+    equal(kk('#select1').val(3).val(), '3', "set for <select>");
+
+    equal(kk('#check1').val(), '1', "get value checkbox");
+    equal(kk('#check2').val(22).val(), '22', "set value checkbox");
+
+    equal(kk('#textarea1').val(), 'this is a big html text', "get value from textarea");
+    equal(kk('#textarea1').val('this is a smaller one').val(), 'this is a smaller one', "get value from textarea");
+
+    equal(changeMarker, 5, "should trow onChange events");
+
+  });
+
+  test('.checked()',function(){
+    var changeMarker = 0;
+
+    kk('#check1,#check2,#radio1,#radio2').change(function(){
+      changeMarker++;
+    });
+
+    equal(kk('#check1').checked(), true, "get state from checkbox (true)");
+    equal(kk('#check2').checked(), false, "get state from checkbox (false)");
+
+    equal(kk('#check1').checked(false).checked(), false, "set state from checkbox (false)");
+    equal(kk('#check2').checked(true).checked(), true, "set state from checkbox (true)");
+
+
+    equal(kk('#radio1').checked(), true, "get state from radio (true)");
+    equal(kk('#radio2').checked(), false, "get state from radio (false)");
+
+    equal(kk('#radio1').checked(false).checked(), false, "set state from radio (false)");
+    equal(kk('#radio2').checked(true).checked(), true, "set state from radio (true)");
+
+
+    equal(kk('#check3').checked(), false, "get state from non existing checkbox");
+
+    equal(kk('#input1').checked(), false, "get state from non checkbox");
+
+    equal(changeMarker, 4, "should trow onChange events");
+
+
+  });
 
 
 
