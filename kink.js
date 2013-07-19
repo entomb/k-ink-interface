@@ -101,7 +101,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         this.get = function(i) {
             if(i === undefined) { i = 0; }
 
-            return new kResult([this.arr[i]]);
+            return new kResult(this.arr[i]);
         };
 
         this.result = function(i) {
@@ -113,11 +113,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         };
 
         this.last = function(i) {
-            return new kResult([this.arr[this.arr.length-1]]);
+            return new kResult(this.arr[this.arr.length-1]);
         };
 
         this.first = function(i) {
-            return new kResult([this.arr[0]]);
+            return new kResult(this.arr[0]);
         };
 
         return this;
