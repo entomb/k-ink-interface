@@ -388,6 +388,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.css = function(prop,value){
+        //preventing type errors
+        if(typeof this.result(0) != "object" || !this.result(0).hasAttribute('style')){
+            return false;
+        }
         if(value===undefined){
             return Css.getStyle(this.result(0),prop);
         }else{
