@@ -1095,12 +1095,14 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.find = function(param){
-        var foundElements = [];
-
+        var foundElements = []; 
         this.each(function(elem){
             var elements = new kResult(Selector.select(param,elem));
-            elements.each(function(childElem){
-                foundElements.push(childElem);
+            elements.each(function(childElem){ 
+                if(!Ink.Util.Array.inArray(childElem,foundElements)){
+                    foundElements.push(childElem);
+                }
+                console.log(childElem);
             });
         });
 
