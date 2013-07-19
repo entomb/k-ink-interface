@@ -942,6 +942,30 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
      /**
+     * Setter and getter for checked elements (checkbox and radio)
+     *
+     * @method attribute
+     * @param {bool} (optional) the new value to set
+     * @return {String|kResult} trows an onChange() event on all elements or returns the value.
+     * @public
+     */
+    kResult.prototype.checked = function(value){
+        if(value === undefined){
+            var elem = this.get(0) || false;
+            if(elem.attr('type')=='checkbox' || elem.attr('type')=='radio' ){
+                return !!elem.attr('checked');
+            }else{
+                return false;
+            }
+        }else{
+            this.each(function(elem){
+                kink(elem).attr('checked',value?false:'');
+            });
+
+            return this.on('change');
+        }
+    }
+     /**
      * Setter and getter for values
      *
      * @method attribute
@@ -952,6 +976,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     kResult.prototype.value = kResult.prototype.val = function(value){
         if(value === undefined){
             var elem = this.result(0);
+            if(elem===undefined){
+                return false;
+            }
             if(elem.nodeName=='SELECT'){
                 return elem.options[elem.selectedIndex].value;
             }else if(elem.nodeName=='TEXTAREA'){
