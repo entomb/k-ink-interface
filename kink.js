@@ -126,11 +126,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     /**
      * returns how many elements are on the resultset
      *
-     * @method length 
+     * @method length
      * @return {int} length of the result array
      * @public
      */
-    kResult.prototype.length = function() { 
+    kResult.prototype.length = function() {
         return this.arr.length;
     };
 
@@ -1003,7 +1003,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         var foundElements = []
         this.each(function(elem){
             var elemFilter = Element.siblings(elem);
-            if(elemFilter){ 
+            if(elemFilter){
                 Ink.Util.Array.each(elemFilter,function(elemSibling){
                     if(!Ink.Util.Array.inArray(elemSibling,foundElements)){
                         foundElements.push(elemSibling);
@@ -1110,14 +1110,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.find = function(param){
-        var foundElements = []; 
+        var foundElements = [];
         this.each(function(elem){
             var elements = new kResult(Selector.select(param,elem));
-            elements.each(function(childElem){ 
+            elements.each(function(childElem){
                 if(!Ink.Util.Array.inArray(childElem,foundElements)){
                     foundElements.push(childElem);
                 }
-                console.log(childElem);
             });
         });
 
