@@ -959,7 +959,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         }else{
             this.each(function(elem){
-                kink(elem).attr('checked',value?false:'');
+                kink(elem).attr('checked',value ? 'checked' : '');
             });
 
             return this.on('change');
