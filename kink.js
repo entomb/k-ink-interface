@@ -1003,8 +1003,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         var foundElements = []
         this.each(function(elem){
             var elemFilter = Element.siblings(elem);
-            if(elemFilter && !Ink.Util.Array.inArray(elemFilter,foundElements)){
-                foundElements.push(elemFilter);
+            if(elemFilter){ 
+                Ink.Util.Array.each(elemFilter,function(elemSibling){
+                    if(!Ink.Util.Array.inArray(elemSibling,foundElements)){
+                        foundElements.push(elemSibling);
+                    }
+                });
             }
         });
         return new kResult(foundElements);
@@ -1061,7 +1065,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     kResult.prototype.parent = function(){
         var parents = [];
         this.each(function(elem,num){
-            if(!Ink.Util.Array.inArray(elem.parentNode,parents)){
+            if(elem.parentNode && !Ink.Util.Array.inArray(elem.parentNode,parents)){
                 parents.push(elem.parentNode);
             }
         });
