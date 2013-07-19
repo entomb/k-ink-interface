@@ -925,6 +925,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         }
     };
 
+
     /**
      *  getter for the element tagName (will allways return UpperCase)
      *
@@ -965,7 +966,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             return this.on('change');
         }
     }
-     /**
+
+
+    /**
      * Setter and getter for values
      *
      * @method attribute
