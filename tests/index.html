@@ -381,7 +381,12 @@
 
       ok(kk(1).in([1,2,3,4]), "is in [1,2,3,4]  (true)");
 
-      ok(!kk(99).has([1,2,3,4]), "99 is in [1,2,3,4] (false)");
+      ok(!kk(99).in([1,2,3,4]), "99 is in [1,2,3,4] (false)");
+
+
+      ok(kk('one').in(['one','two','three']), "'one' in ['one','two','three'] (true)");
+
+      ok(!kk('none').in(['one','two','three']), "'none' in ['one','two','three'] (false)");
 
       ok(kk(".first").in("ul li"), ".first is in ul>li (true)");
 

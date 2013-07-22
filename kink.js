@@ -201,7 +201,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.in = function(param) {
-        return InkArray.inArray(this.result(0),kk(param).result() || param);
+        return InkArray.inArray(this.result(0) || this.selector,kk(param).result());
     };
 
 
