@@ -365,6 +365,10 @@
 
       ok(!kk([1,2,3,4]).has(99), "[1,2,3,4] has 99 (false)");
 
+      ok(kk(['one','two','three']).has('one'), "['one','two','three'] has 'one' (true)");
+
+      ok(!kk(['one','two','three']).has('none'), "['one','two','three'] has 'none' (false)");
+
       ok(kk("ul li").has(".first"), "ul>li has .first (true)");
 
       ok(!kk("ul li").has(".item"), "ul>li has .item (false)");
@@ -373,15 +377,15 @@
     });
 
 
-    test('is()', function(){
+    test('in()', function(){
 
-      ok(kk(1).is([1,2,3,4]), "is in [1,2,3,4]  (true)");
+      ok(kk(1).in([1,2,3,4]), "is in [1,2,3,4]  (true)");
 
       ok(!kk(99).has([1,2,3,4]), "99 is in [1,2,3,4] (false)");
 
-      ok(kk(".first").is("ul li"), ".first is in ul>li (true)");
+      ok(kk(".first").in("ul li"), ".first is in ul>li (true)");
 
-      ok(!kk(".item").is("ul li"), ".item is in ul>li (false)");
+      ok(!kk(".item").in("ul li"), ".item is in ul>li (false)");
 
     });
 

@@ -188,7 +188,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.has = function(param) {
-        return InkArray.inArray(kk(param).result(0),this.arr);
+        return InkArray.inArray(kink(param).result(0) || param,this.arr);
     };
 
 
@@ -200,8 +200,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {Bool}
      * @public
      */
-    kResult.prototype.is = function(param) {
-        return InkArray.inArray(this.result(0),kk(param).result());
+    kResult.prototype.in = function(param) {
+        return InkArray.inArray(this.result(0),kk(param).result() || param);
     };
 
 
@@ -256,20 +256,33 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     };
 
     /**
-     * Alias for the Ink.Dom.Css.setClassName method
-     * adding support for chaining.
+     * will get or set the class name of the elements in the resultset
      *
-     * @method setClass
-     * @param {String} className Class to be added/removed to/from the element(s)
-     * @param {Boolean} boolState Flag that determines if the class should be added or removed
-     * @return {kResult} Returns the same object to support chaining.
+     * @method class
+     * @param {String} className Class to be get/set to/from the element(s)
+     * @return {kResult|array|null} Returns the same object to support chaining or an array with all class names in the first element.
      * @public
      */
-    kResult.prototype.setClassName = kResult.prototype.setClass = function(className,boolState){
-        this.each(function(elem,key){
-            Css.setClassName(elem,className,boolState);
-        });
-        return this;
+    kResult.prototype.class = function(className){
+        if(className!=null){
+            return this.each(function(elem,key){
+               if(elem.hasOwnProperty('className')){
+                    if(typeof className == "string"){
+                        elem.className = className;
+                    }else{
+                        elem.className = "";
+                        kink(elem).addClassName(className);
+                    }
+               }
+            });
+        }else{
+            var className = this.get(0).attr('class')
+            if(className!==null){
+                return className.split(" ");
+            }else{
+                return [];
+            }
+        }
     };
 
     /**
