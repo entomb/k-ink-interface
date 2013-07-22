@@ -313,18 +313,18 @@
     test('filter()', function(){
 
 
-      filter1 = kk([1,2,3,4,5]).filter(function(item){
+      var filter1 = kk([1,2,3,4,5]).filter(function(item){
         return (item > 3);
       }).result();
       deepEqual(filter1, [4,5] ," filtering an array (true)");
 
 
-      filter2 = kk([1,2,3,4,5]).filter(function(item){
+      var filter2 = kk([1,2,3,4,5]).filter(function(item){
         return (item > 30);
       }).result();
       deepEqual(filter2, [] ," filtering an array (false)");
 
-      filter3 = kk('ul li').filter(function(item){
+      var filter3 = kk('ul li').filter(function(item){
         return (item.id == 'li1');
       }).result();
       deepEqual(filter3, [li1] ," filtering a resultset");
@@ -335,22 +335,22 @@
 
     test('some()', function(){
 
-      some1 = kk([1,2,3,4,5]).some(function(item){
+      var some1 = kk([1,2,3,4,5]).some(function(item){
         return (item==1);
       });
       ok(some1, " from a source array (true)");
 
-      some2 = kk([1,2,3,4,5]).some(function(item){
+      var some2 = kk([1,2,3,4,5]).some(function(item){
         return (item==99);
       });
       ok(!some2, " from a source array (false)");
 
-      some3 = kk("ul li").some(function(item){
+      var some3 = kk("ul li").some(function(item){
         return (item.className=="first");
       });
       ok(some3, " filtering a resultset (true)");
 
-      some4 = kk("ul li").some(function(item){
+      var some4 = kk("ul li").some(function(item){
         return (item.className=="nothere");
       });
       ok(!some4, " filtering a resultset (false)");

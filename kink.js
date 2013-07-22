@@ -429,7 +429,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             if(typeof selector === 'function'){
                 callback = selector;
             } else {
-                cb = callback;
+                var cb = callback;
                 callback = Ink.bindEvent(function( event ){
                     var elm = Event.element(event);
                     var context = this.find(selector);
