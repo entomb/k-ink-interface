@@ -51,6 +51,7 @@
   </div>
   <script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
   <script src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
+  <script src="http://sinonjs.org/releases/sinon-1.7.3.js"></script> 
   <script src="../kink.js"></script>
   <script>
 
@@ -396,51 +397,41 @@
 
     module("events");
     test('bind() and alias', function(){
-
-      var fnEvent = function(){
-        watcher++;
-      };
-
-      var watcher=0;
+      var fnEvent = sinon.spy();
 
       kk("#li2").click(fnEvent).click();
 
-      equal(watcher, 1,".click() on single item");
+      equal(fnEvent.calledOnce, true,".click() on single item");
 
 
       kk(".first").click(fnEvent);
 
-      var watcher = 0;
       kk('#li1').click();
       kk('#li7').click();
 
-      equal(watcher, 2,".click() on multi item");
+      equal(fnEvent.callCount, 3,".click() on multi item");
 
       kk("ul").bind('click','.last',fnEvent);
 
-      var watcher = 0;
       kk("#li6").click();
       kk("#li11").click(); //should count 2 because its inside li6
 
 
-      equal(watcher, 3,".click() using scope selector");
+      equal(fnEvent.callCount, 6,".click() using scope selector");
 
 
-      var watcher = 0;
       kk("#li2").click();
-      equal(watcher, 1,"firing 1st events again using .click()");
+      equal(fnEvent.callCount, 7,"firing 1st events again using .click()");
 
-      var watcher = 0;
       kk("#li1").click();
-      equal(watcher, 1,"firing 2nd events again using .click()");
+      equal(fnEvent.callCount, 8,"firing 2nd events again using .click()");
 
-      var watcher = 0;
       kk("#a1").hover(fnEvent,fnEvent);
 
       kk('#a1').on('mouseover');
       kk('#a1').on('mouseout');
 
-      equal(watcher, 2,".hover() in and out");
+      equal(fnEvent.callCount, 10,".hover() in and out");
 
     });
 
