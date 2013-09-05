@@ -1121,16 +1121,16 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @return {kResult} Returns a new kResult object with an array with of parentNodes.
      * @public
      */
-    kResult.prototype.parent = function(){
+    kResult.prototype.parent = function(selector){
         var parents = [];
         this.each(function(elem,num){
-            if(elem.parentNode && !Ink.Util.Array.inArray(elem.parentNode,parents)){
+            var parentNode = (selector!=null) ?  Element.findUpwardsBySelector(selector) : elem.parentNode;
+            if( parentNode && !Ink.Util.Array.inArray(elem.parentNode,parents)){
                 parents.push(elem.parentNode);
             }
         });
-
         //unique?
-        //Using Ink.Util.Array.inArray instead
+        //Using Ink.Util.Array.inArray instead of this:
         //parents.filter(function (e,i,arr) { return arr.lastIndexOf(e) === i; });
         return new kResult(parents);
     };

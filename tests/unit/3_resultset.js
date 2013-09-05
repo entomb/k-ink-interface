@@ -121,4 +121,9 @@ test('parent()', function(){
   equal(kk('#a1').parent().parent().result(0), ul1, "nesting single parents ul<li<a");
 
   deepEqual(kk('#a1,#a10').parent().parent().result(), [ul1,ul2], "nesting multi parents ul<li<a");
+
+
+  deepEqual(kk('#a1').parent('ul').result(), [ul1], "finding upwards parents  based on query string");
+
+  deepEqual(kk('#a1,#a10').parent('ul').result(), [ul1,ul2], "finding multiple upwards parents based on query string");
 });
