@@ -712,18 +712,15 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.html = function(html){
         if(html === undefined){
-            html = "";
-
+            return this.result(0).innerHTML || '';
+        }else{
             this.each(function(elem){
-                html+=Element.textContent(elem).replace(/\n/g," ");
+                if(elem.innerHTML !== undefined){
+                    elem.innerHTML = html
+                }
             });
-
-            return html;
         }
 
-        this.each(function(elem){
-            Element.setTextContent(elem,html);
-        });
         return this;
     };
 
@@ -738,7 +735,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.appendHTML = function(html){
         this.each(function(elem){
-            Element.appendHTML(elem,html);
+            if(elem.innerHTML !== undefined){
+                elem.innerHTML+= html
+            }
         });
         return this;
     };
@@ -755,7 +754,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     kResult.prototype.prependHTML = function(html){
 
         this.each(function(elem){
-            Element.prependHTML(elem,html);
+            if(elem.innerHTML !== undefined){
+                elem.innerHTML = html+elem.innerHTML
+            }
         });
         return this;
     };

@@ -51,7 +51,7 @@
   </div>
   <script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
   <script src="http://cdn.ink.sapo.pt/2.0.0/js/ink.min.js"></script>
-  <script src="http://sinonjs.org/releases/sinon-1.7.3.js"></script> 
+  <script src="http://sinonjs.org/releases/sinon-1.7.3.js"></script>
   <script src="../kink.js"></script>
   <!-- Loading global assigns -->
   <script src="globals.js"></script>
@@ -72,11 +72,11 @@
 
     equal(kk('#a2').html(), 'link2', "get simple html content");
 
-    equal(kk('#li1').html(), 'link1', "get childs html content");
+    equal(kk('#li1').html(), '<a id="a1" href="#">link1</a>', "get childs html content");
 
     equal(kk('#a1').html('testing1').html(), 'testing1', "set simple html content");
 
-    equal(kk('.first').html(), 'testing1sublink', "should concat all html from all childs of first element");
+    equal(kk('.first a').html(), 'testing1', "should concat all html from all childs of first element");
 
   });
 
