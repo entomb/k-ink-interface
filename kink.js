@@ -706,7 +706,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             return (this.result(0)!==undefined) ? this.result(0).innerHTML : undefined;
         }else{
             return this.each(function(elem){
-                if(elem.hasOwnProperty('innerHTML')){
+                if(elem.nodeType ===1){
                     elem.innerHTML = html
                 }
             });
@@ -724,7 +724,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.appendHTML = function(html){
         return this.each(function(elem){
-            if(elem.hasOwnProperty('innerHTML')){
+            if(elem.nodeType ===1){
                 elem.innerHTML+= html
             }
         });
@@ -741,7 +741,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.prependHTML = function(html){
         return this.each(function(elem){
-            if(elem.hasOwnProperty('innerHTML')){
+            if(elem.nodeType ===1){
                 elem.innerHTML = html+elem.innerHTML
             }
         });
