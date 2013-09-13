@@ -277,7 +277,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         }else{
             var className = this.attr('class')
             if(className!==null){
-                return className.split(" ");
+                return className.split(/\s+/);
             }else{
                 return [];
             }
