@@ -216,7 +216,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.addClassName = kResult.prototype.addClass = function(className){
 
-        this.each(function(elem){
+        return this.each(function(elem){
             if(className instanceof Array){
                 kink(className).each(function(iclass){
                     Css.addClassName(elem,iclass);
@@ -226,7 +226,6 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         });
 
-        return this;
     };
 
     /**
@@ -240,7 +239,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.removeClassName = kResult.prototype.removeClass = function(className){
 
-        this.each(function(elem){
+        return this.each(function(elem){
             if(className===undefined ){
                 elem.className=null;
             }else if(className instanceof Array){
@@ -252,8 +251,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         });
 
-        return this;
     };
+
 
     /**
      * will get or set the class name of the elements in the resultset
@@ -276,7 +275,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                }
             });
         }else{
-            var className = this.get(0).attr('class')
+            var className = this.attr('class')
             if(className!==null){
                 return className.split(" ");
             }else{
@@ -321,10 +320,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.hide = function(){
-         this.each(function(elem){
+        return this.each(function(elem){
             Css.hide(elem);
         });
-        return this;
     };
 
     /**
@@ -336,10 +334,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.show = function(){
-        this.each(function(elem){
+        return this.each(function(elem){
             Css.show(elem);
         });
-        return this;
     };
 
     /**
@@ -352,10 +349,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.showHide = function(boolState){
-        this.each(function(elem){
+        return this.each(function(elem){
             Css.showHide(elem,boolState);
         });
-        return this;
     };
 
     /**
@@ -367,10 +363,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.toggle = function(){
-        this.each(function(elem){
+        return this.each(function(elem){
             Css.toggle(elem);
         });
-        return this;
     };
 
     /**
@@ -383,10 +378,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.style = kResult.prototype.setStyle = function(inlineStyle){
-        this.each(function(elem){
+        //TODO: style getter, Object format
+        return this.each(function(elem){
             Css.setStyle(elem,inlineStyle);
         });
-        return this;
     };
 
 
@@ -402,15 +397,15 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.css = function(prop,value){
         //preventing type errors
-        if(typeof this.result(0) != "object" || !this.result(0).hasOwnProperty('style')){
-            return false;
-        }
-        if(value===undefined){
-            return Css.getStyle(this.result(0),prop);
+        if(typeof this.result(0) == "object" && this.result(0).hasOwnProperty('style')){
+            if(value===undefined){
+                return Css.getStyle(this.result(0),prop);
+            }else{
+                return this.setStyle(prop+":"+value);
+            }
         }else{
-            this.setStyle(prop+":"+value);
+            return null;
         }
-        return this;
     };
 
 
@@ -631,8 +626,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.mouseover = function(callback){
-        this.bind('mouseover',callback);
-        return this;
+        return this.bind('mouseover',callback);
     };
 
     /**
@@ -645,8 +639,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.mouseout = function(callback){
-        this.bind('mouseout',callback);
-        return this;
+        return this.bind('mouseout',callback);
     };
 
     /**
@@ -678,10 +671,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.appendTo = function(select){
-        this.each(function(elem){
+        return this.each(function(elem){
             kink(select).result(0).appendChild(elem);
         });
-        return this;
     };
 
     /**
@@ -695,10 +687,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.create = function(tag,options){
-        this.each(function(elem){
+        return this.each(function(elem){
             kink.create(tag,options).appendTo(elem);
         });
-        return this;
     };
 
 
@@ -712,16 +703,14 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.html = function(html){
         if(html === undefined){
-            return this.result(0).innerHTML || '';
+            return (this.result(0)!==undefined) ? this.result(0).innerHTML : undefined;
         }else{
-            this.each(function(elem){
-                if(elem.innerHTML !== undefined){
+            return this.each(function(elem){
+                if(elem.hasOwnProperty('innerHTML')){
                     elem.innerHTML = html
                 }
             });
         }
-
-        return this;
     };
 
     /**
@@ -734,12 +723,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.appendHTML = function(html){
-        this.each(function(elem){
-            if(elem.innerHTML !== undefined){
+        return this.each(function(elem){
+            if(elem.hasOwnProperty('innerHTML')){
                 elem.innerHTML+= html
             }
         });
-        return this;
     };
 
     /**
@@ -752,13 +740,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.prependHTML = function(html){
-
-        this.each(function(elem){
-            if(elem.innerHTML !== undefined){
+        return this.each(function(elem){
+            if(elem.hasOwnProperty('innerHTML')){
                 elem.innerHTML = html+elem.innerHTML
             }
         });
-        return this;
     };
 
     /**
@@ -787,13 +773,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.data = function(key,value){
         if(key!==undefined && value!==undefined){
-            this.each(function(elem){
-                kink(elem).attr('data-'+key,value);
-            });
-            return this;
+            return this.attr('data-'+key,value);
         }else if(key!==undefined){
-            var Data = Element.data(this.result(0));
-            return (Data[key]!==undefined) ? Data[key] : null;
+           return this.get(0).attr('data-'+key) || Element.data(this.result(0))[key];
         }else{
             return Element.data(this.result(0));
         }
@@ -854,19 +836,6 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         return Element.offset2(this.result(0));
     };
 
-    /**
-     * Alias of the Ink.Dom.Element.hasAttribute
-     *
-     * @method hasAttribute
-     * @param {String} attr Name of the attribute to check if it exists in the element
-     * @return {Array} Returns an array of elements that have the attribute.
-     * @public
-     */
-    kResult.prototype.hasAttribute = function(attr){
-        return this.some(function(elem){
-            return Element.hasAttribute(elem,attr);
-        });
-    };
 
     /**
      * Setter and getter for attributes
@@ -878,12 +847,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.attr = kResult.prototype.attribute = function(attr,value){
         if(value !== undefined){
-            this.each(function(elem){
-                elem.setAttribute(attr,value);
+            return this.each(function(elem){
+                if(elem.setAttribute!=undefined){
+                    elem.setAttribute(attr,value);
+                }
             });
-            return this;
         }else{
-            if(this.result(0)){
+            if(this.result(0)!==undefined && this.result(0).getAttribute!=undefined && Element.hasAttribute(this.result(0),attr)){
                 return this.result(0).getAttribute(attr);
             }else{
                 return null;
@@ -902,16 +872,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.name = function(value){
         if(value !== undefined){
-            this.each(function(elem){
-                elem.setAttribute('name',value);
-            });
-            return this;
+            return this.attr('name',value);
         }else{
-            if(this.result(0)){
-                return this.result(0).getAttribute('name');
-            }else{
-                return null;
-            }
+            return this.attr('name');
         }
     };
 
@@ -926,16 +889,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kResult.prototype.id = function(value){
         if(value !== undefined){
-            this.each(function(elem){
-                elem.setAttribute('id',value);
-            });
-            return this;
+            return this.attr('id',value);
         }else{
-            if(this.result(0)){
-                return this.result(0).getAttribute('id');
-            }else{
-                return null
-            }
+            return this.attr('id');
         }
     };
 
@@ -948,8 +904,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @public
      */
     kResult.prototype.tag = function(){
-        if(this.result(0)){
-            return this.result(0).nodeName.toUpperCase();
+        if(this.result(0)!==undefined){
+            return this.result(0).nodeName.toUpperCase() || null;
         }else{
             return null;
         }
@@ -1153,10 +1109,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 fetchedChilds.push(childElem);
             });
         });
-        if(typeof i !== 'number' && !i){
-            return new kResult(fetchedChilds);
-        }else{
+        if(typeof i === 'number'){
             return new kResult(fetchedChilds).get(i);
+        }else{
+            return new kResult(fetchedChilds);
         }
     };
 
@@ -1301,11 +1257,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @param {Function} callable  the new method function, scope of 'this' will be the kResult obj
      */
     kink.extend = function(method,callable){
-        if(kResult.prototype[method]===undefined){
+        if(typeof callable == 'function'){
             kResult.prototype[method] = callable;
-            return true;
+            return kink;
         }
-        return false;
     };
 
 
@@ -1330,7 +1285,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         }
 
-        return new method.call(this,url, options);
+        return new method.call(this, url, options);
     };
 
 
@@ -1347,7 +1302,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         return new kResult([Element.create(tag,options)]);
     };
 
-    window.kResult = kResult;
+    //window.kResult = kResult;
     window.kk = kink;
     return kink;
 });
