@@ -82,6 +82,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         }else if(param instanceof Function){ //exec function
             return kink(param(context));
 
+        }else if(param instanceof kink.result){ //recursive much?
+            return param;
+
         }else{ //fallback
             var rArray = kink([param]);
         }
@@ -149,7 +152,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     kink.extend({
         each: function(arr,callback){
             InkArray.each(arr,callback);
-            return kink(arr);
+            return this;
         }
     });
 
@@ -158,8 +161,68 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
     kink.result.extend({
         each: function(callback){
-            return kink.each(this,callback);
+            kink.each(this,callback);
+            return this;
         }
+    });
+
+
+
+    kink.extend({
+        addClassName: function(elem,className){
+            if(className instanceof Array){
+                this.each(className,function(iclass){
+                    InkCss.addClassName(elem,iclass);
+                });
+            }else{
+                InkCss.addClassName(elem,className);
+            }
+        },
+
+        removeClassName: function(elem,className){
+            if(className instanceof Array){
+                this.each(className,function(iclass){
+                    InkCss.removeClassName(elem,iclass);
+                });
+            }else{
+                InkCss.removeClassName(elem,className);
+            }
+        },
+
+        getClassName: function(elem){
+            return elem.className ?  elem.className : undefined
+        },
+
+        setClassName: function(elem,newClass){
+            if(elem.hasOwnProperty('className')){
+                elem.className = "";
+                this.addClassName(elem,newClass);
+            };
+        }
+    });
+
+    kink.result.extend({
+            remClass: function(className){
+               return this.each(function(elem){
+                    kink.removeClassName(elem,className);
+                });
+            },
+
+            addClass: function(className){
+               return this.each(function(elem){
+                    kink.addClassName(elem,className);
+                });
+            },
+
+            class: function(className){
+                if(className==undefined){
+                    return kink.getClassName(this.result(0));
+                }else{
+                    return this.each(function(elem){
+                        kink.setClassName(elem,className);
+                    });
+                }
+            }
     });
 
 
