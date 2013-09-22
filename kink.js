@@ -143,35 +143,50 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
+     * @extends KinkResult
      * Basic result navigation
      *
      */
     kink.result.extend({
 
+        /**
+         * Gets all nodes or node[i] from a resultset
+         *
+         * @chainable
+         */
         get: function(i) {
             return (i!==undefined) ? this[parseInt(i,10)] : InkArray.convert(this);
         },
 
+        /**
+         * gets a new resultset with only node[i]
+         *
+         * @chainable
+         */
         result: function(i){
             return kink(this.get(i));
         },
 
+        /**
+         * gets a new resultset with only the last node
+         *
+         * @chainable
+         */
         last: function() {
-            return kink(this.result(this.length-1));
+            return this.result(this.length-1);
         },
 
+        /**
+         * gets a new resultset with only the first node
+         *
+         * @chainable
+         */
         first: function() {
-            return kink(this.result(0));
-        }
-
-    });
-
-
-    kink.result.extend({
-
+            return this.result(0);
+        },
 
         /**
-         * finds elements inside each element of a result set.
+         * finds elements inside each of the element on the result set.
          *
          * @chainable
          */
@@ -294,9 +309,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * mapping a core InkJS function
+     * @extends Kink
+     * @uses  Ink.Util.Array
+     *
+     * Array iterators and filter methods
      */
     kink.extend({
+
+        /**
+         * Executes a callback fore element of an array
+         *
+         * @uses Ink.Util.Array.each
+         */
         each: function(arr,callback){
             return InkArray.each( InkArray.convert(arr) ,callback);
             /*
@@ -312,18 +336,41 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             */
         },
 
+        /**
+         * Executes a callback for each element of an array and returns (bool) if any callback returned true
+         *
+         * @uses Ink.Util.Array.some
+         * @return {bool}
+         */
         some: function(arr,callback){
             return InkArray.some( InkArray.convert(arr) ,callback);
         }
 
     });
 
+
+    /**
+     * @extends KinkResult
+     *
+     * Resultset iterators and filter methods
+     */
     kink.result.extend({
+
+        /**
+         * Calls kink.each using the current resultset as a paramenter
+         *
+         * @chainable
+         */
         each: function(callback){
             kink.each(this,callback);
             return this;
         },
 
+        /**
+         * Calls kink.some using the current resultset as a paramenter
+         *
+         * @return {bool}
+         */
         some: function(callback){
             return kink.some(this,callback);
         }
@@ -338,11 +385,18 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
     /**
      * @extends KinkResult
-     * @uses  InkCSS
+     * @uses  Ink.Dom.Css
      *
      * CSS Class names
      */
     kink.result.extend({
+
+            /**
+             * removes classNames from elements in the resultset.
+             *
+             * @uses Ink.Dom.Css.removeClassName
+             * @chainable
+             */
             removeClass: function(className){
                 if(className===undefined){
                     return this.each(function(elem){
@@ -363,6 +417,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 }
             },
 
+
+            /**
+             * adds classNames to elements in the resultset.
+             *
+             * @uses Ink.Dom.Css.addClassName
+             * @chainable
+             */
             addClass: function(className){
                 if(className===undefined){
                     return this;
@@ -379,16 +440,33 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 }
             },
 
+
+            /**
+             * checks if one or more elements has a given className
+             *
+             * @uses Ink.Dom.Css.hasClassName
+             * @chainable
+             */
             hasClass: function(className){
                 return this.some(function(elem){
                     return InkCss.hasClassName(elem,className);
                 });
             },
 
+            /**
+             * replaces all className on all elements
+             *
+             * @chainable
+             */
             setClass: function(className){
                 return this.removeClass().addClass(className);
             },
 
+            /**
+             * gets or sets the className of all elements
+             *
+             * @chainable
+             */
             class: function(className){
                 if(className===undefined){
                     var elem = this.get(0);
@@ -408,6 +486,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
    kink.result.extend({
 
+        /**
+         * gets or sets the style attribute of an element
+         *
+         * @uses  Ink.Dom.Css.setStyle
+         * @chainable
+         */
         style: function(inlineStyle){
             if(inlineStyle instanceof String){
                 return this.each(function(elem){
@@ -420,6 +504,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         },
 
+
+        /**
+         * gets or sets css properties of elements in the resultset
+         *
+         * @uses  Ink.Dom.Css.getStyle
+         * @chainable
+         */
         css: function(cssProp,value){
             //preventing type errors
             if(typeof this.get(0) !== "object" || !this.get(0).hasOwnProperty('style')){
@@ -448,7 +539,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
 
-    window.kk = kink;
+    window.kk = window.kink = kink;
     return kink;
 
     //end
