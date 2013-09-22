@@ -91,7 +91,7 @@ kk('ul li a.active')
 //array
 kk([1,2,3])
 
-//kResult object
+//kinkResult object
 var parent = kk('div')
 kk(parent)
 
@@ -111,10 +111,10 @@ kk(function(context){
 Development
 ===========
 
-Clone this repo and use npm to compile k(Ink). All code and modules are located at `lib/*.js`
+Clone this repo and use npm to compile __k(Ink)__. All code and modules are located at `lib/*.js`
 
 ```sh
-$ git clone git@github.com:entomb/k-ink-interface.git kink
+$ git clone https://github.com/entomb/k-ink-interface.git kink
 $ cd kink
 $ npm install
 ```
@@ -133,7 +133,7 @@ $ grunt
 
 Plugins
 ===========
-Kink suports an `.extend()` syntax. To add features to the `kink` core or `KinkResult` use the following syntax:
+Kink suports an `.extend()` syntax. To add features to the `kink` core or `kinkResult` use the following syntax:
 
 ```js
 
