@@ -2,7 +2,7 @@
  * This looks stupid but i wanted to check how tests worked before I wrote any
  */
 module('configuration');
-test( "tests are not stupid", 6,function() {
+test( "tests are not stupid",function() {
 
   ok( true, "true works" );
 
@@ -25,6 +25,6 @@ test( "loading kink", function() {
 
   ok( kk, "kink is loaded" );
 
-  equal( kk(document).result(0), document, "kink works" );
+  equal( kk(document).get(0), document, "kink works" );
 
 });

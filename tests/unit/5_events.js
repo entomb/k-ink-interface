@@ -2,6 +2,7 @@
  * @uses  sinon.js
  * Testing event bind and fire.
  */
+/*
 module("events");
 test('bind() and alias', function(){
       var fnEvent = sinon.spy();
@@ -41,3 +42,4 @@ test('bind() and alias', function(){
       equal(fnEvent.callCount, 10,".hover() in and out");
 
 });
+*/

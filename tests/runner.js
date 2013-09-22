@@ -137,3 +137,27 @@
 		}, false);
 	}
 })();
+
+
+
+/**
+ * Sets a nice output for QUnit (important when using phantomjs)
+ */
+console.log("\n");
+console.log("+-------------------------------+");
+console.log("+ Running unit tests for k(Ink) +")
+console.log("+-------------------------------+");
+console.log("   (✔/✖) [module name] ");
+console.log("--------------------------------");
+
+
+QUnit.testDone(function(r) {
+
+    if(r.failed==0){
+      var sign = "\033[32m ✔\033[0m";
+    }else{
+      var sign = "\033[31m ✖\033[0m";;
+    }
+
+    console.log(sign+" ("+r.passed+"/"+r.failed+")"+" [\033[36m"+r.module+"\033[0m] "+r.name);
+});

@@ -1,0 +1,29 @@
+{
+  "name": "k-ink-interface",
+  "version": "0.1.0",
+  "description": "k(ink) is an interface for the InkJs framework",
+  "main": "kink.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "phantomjs tests/runner.js index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/entomb/k-ink-interface.git"
+  },
+  "author": "Jonathan Tavares",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/entomb/k-ink-interface/issues"
+  },
+
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-qunit": "~0.2.2",
+    "grunt-contrib-requirejs": "~0.3.0"
+  }
+}

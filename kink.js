@@ -58,27 +58,37 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     InkJsonP
 ){
 
+
     /**
-     * Kink Constructor
+     * @class Kink
+     *
+     * @constructor
+     * @param {mixed} param
+     * @param {mixed} context
+     * @private
      */
-    var kink = function(a,b){
-        return new kink.result(a,b);
+    var kink = function(param,context){
+        return new kink.result(param,context);
     };
 
     /**
-     * Kink resultset constructor
+     * @class kinkResult
+     *
+     * @constructor
+     * @param {mixed} param
+     * @param {mixed} context
+     * @private
      */
     kink.result = function(param,context){
+        var rArray = [];
 
         if(!param){ //revent fuckups
             return this;
         }else if(param instanceof Array){ //direct array
-            var rArray = param;
+            rArray = param;
 
         }else if(typeof param === 'string'){ //query selector
-            var context = (context==undefined) ?  document : context;
-            var rArray = InkSelector.select(param,context);
-
+            rArray = InkSelector.select(param, context || document);
         }else if(param instanceof Function){ //exec function
             return kink(param(context));
 
@@ -86,7 +96,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             return param;
 
         }else{ //fallback
-            var rArray = kink([param]);
+            rArray = kink([param]);
         }
 
         //import resultArray into this
@@ -102,39 +112,48 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     };
 
     //is this real life?
-    kink.result.prototype = new Array();
+    kink.result.prototype = [];
 
     /**
-     * Kink extend()
+     * Allows new methods to be gived to the Kink Object or the extention of another object
+     * @param  {Object} extendObj
+     * @param  {Object} paramObj
+     * @return
      */
     kink.extend = function(extendObj,paramObj){
-        if(paramObj==undefined){
+        if(paramObj===undefined){
             Ink.extendObj(kink,extendObj);
         }else{
             return Ink.extendObj(extendObj,paramObj);
         }
+    };
 
-        return this;
-    }
 
+    /**
+     * Allows new methods to be gived to the kinkResult Object
+     * @param  {Object} extendObj
+     */
     kink.result.extend = function(obj){
         kink.extend(kink.result.prototype,obj);
-    }
+    };
 
 
 
 
-    /*
-      Resultset navigation
+
+
+    /**
+     * Basic result navigation
+     *
      */
     kink.result.extend({
 
-        result: function(i) {
-            return (i!=undefined) ? this[parseInt(i)] : InkArray.convert(this);
+        get: function(i) {
+            return (i!==undefined) ? this[parseInt(i,10)] : InkArray.convert(this);
         },
 
-        get: function(i){
-            return kink(this.result(i));
+        result: function(i){
+            return kink(this.get(i));
         },
 
         last: function() {
@@ -144,91 +163,294 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         first: function() {
             return kink(this.result(0));
         }
+
     });
+
+
+    kink.result.extend({
+
+
+        /**
+         * finds elements inside each element of a result set.
+         *
+         * @chainable
+         */
+        find: function(selector){
+            var foundElements = [];
+            this.each(function(elem){
+                kink(selector,elem).each(function(childElem){
+                    if(!InkArray.inArray(childElem,foundElements)){
+                        foundElements.push(childElem);
+                    }
+                });
+            });
+
+            return kink(foundElements);
+        },
+
+
+        /**
+         * gets the all the childs for each element in a result set.
+         *
+         * @uses Ink.Dom.Element.siblings
+         * @chainable
+         */
+        siblings: function(){
+            var foundElements = [];
+            this.each(function(elem){
+                var elemFilter = InkElement.siblings(elem);
+                if(elemFilter){
+                    InkArray.each(elemFilter,function(elemSibling){
+                        if(!InkArray.inArray(elemSibling,foundElements)){
+                            foundElements.push(elemSibling);
+                        }
+                    });
+                }
+            });
+
+            return kink(foundElements);
+        },
+
+
+        /**
+         * gets the next element for each element in a result set.
+         *
+         * @uses Ink.Dom.Element.nextElementSibling
+         * @chainable
+         */
+        next: function(){
+            var foundElements = [];
+            this.each(function(elem){
+                var elemFilter = InkElement.nextElementSibling(elem);
+                if(elemFilter && !InkArray.inArray(elemFilter,foundElements)){
+                    foundElements.push(elemFilter);
+                }
+            });
+            return kink(foundElements);
+        },
+
+
+        /**
+         * gets the previous element for each element in a result set.
+         *
+         * @uses Ink.Dom.Element.previousElementSibling
+         * @chainable
+         */
+        prev: function(){
+            var foundElements = [];
+            this.each(function(elem){
+                var elemFilter = InkElement.previousElementSibling(elem);
+                if(elemFilter && !InkArray.inArray(elemFilter,foundElements)){
+                    foundElements.push(elemFilter);
+                }
+            });
+            return kink(foundElements);
+        },
+
+
+        /**
+         * gets the parent Nodes of a set of elements.
+         *
+         * @chainable
+         */
+        parent: function(){
+            var foundParents = [];
+            this.each(function(elem){
+                if(elem.parentNode && !InkArray.inArray(elem.parentNode,foundParents)){
+                    foundParents.push(elem.parentNode);
+                }
+            });
+
+            return kink(foundParents);
+        },
+
+
+        /**
+         * gets the childrenNodes of a set of elements.
+         *
+         * @chainable
+         */
+        childs: function(i){
+            var foundElements = [];
+            this.each(function(elem){
+                var collection = InkArray.convert(elem.children);
+                kink(collection).each(function(childElem){
+                    if(childElem && !InkArray.inArray(childElem,foundElements)){
+                        foundElements.push(childElem);
+                    }
+                });
+            });
+
+            if(typeof i !== 'number' && !i){
+                return kink(foundElements);
+            }else{
+                return kink(foundElements).get(i);
+            }
+        }
+
+    });
+
+
+
 
     /**
      * mapping a core InkJS function
      */
     kink.extend({
         each: function(arr,callback){
-            InkArray.each(arr,callback);
-            return this;
+            return InkArray.each( InkArray.convert(arr) ,callback);
+            /*
+
+                @NOTE InkArray has no way of passing a 'this' context
+
+                var array = InkArray.convert(input) || [];
+                for(var i; i<=array.length; i++){
+                    callback.call(array[i], array[i], i, array);
+                }
+                return this;
+
+            */
+        },
+
+        some: function(arr,callback){
+            return InkArray.some( InkArray.convert(arr) ,callback);
         }
+
     });
 
-    /**
-     * mapping a kink function to the resultset
-     */
     kink.result.extend({
         each: function(callback){
             kink.each(this,callback);
             return this;
+        },
+
+        some: function(callback){
+            return kink.some(this,callback);
         }
+
     });
 
 
 
-    kink.extend({
-        addClassName: function(elem,className){
-            if(className instanceof Array){
-                this.each(className,function(iclass){
-                    InkCss.addClassName(elem,iclass);
-                });
-            }else{
-                InkCss.addClassName(elem,className);
-            }
-        },
 
-        removeClassName: function(elem,className){
-            if(className instanceof Array){
-                this.each(className,function(iclass){
-                    InkCss.removeClassName(elem,iclass);
-                });
-            }else{
-                InkCss.removeClassName(elem,className);
-            }
-        },
 
-        getClassName: function(elem){
-            return elem.className ?  elem.className : undefined
-        },
 
-        setClassName: function(elem,newClass){
-            if(elem.hasOwnProperty('className')){
-                elem.className = "";
-                this.addClassName(elem,newClass);
-            };
-        }
-    });
 
+    /**
+     * @extends KinkResult
+     * @uses  InkCSS
+     *
+     * CSS Class names
+     */
     kink.result.extend({
-            remClass: function(className){
-               return this.each(function(elem){
-                    kink.removeClassName(elem,className);
-                });
+            removeClass: function(className){
+                if(className===undefined){
+                    return this.each(function(elem){
+                        if(elem && elem.hasOwnProperty('className')){
+                            elem.className = null;
+                        }
+                    });
+                }else if(className instanceof Array){
+                    return this.each(function(elem){
+                        kink.each(className,function(iclass){
+                            InkCss.removeClassName(elem,iclass);
+                        });
+                    });
+                }else{
+                    return this.each(function(elem){
+                        InkCss.removeClassName(elem,className);
+                    });
+                }
             },
 
             addClass: function(className){
-               return this.each(function(elem){
-                    kink.addClassName(elem,className);
+                if(className===undefined){
+                    return this;
+                }else if(className instanceof Array){
+                    return this.each(function(elem){
+                        kink.each(className,function(iclass){
+                            InkCss.addClassName(elem,iclass);
+                        });
+                    });
+                }else{
+                    return this.each(function(elem){
+                        InkCss.addClassName(elem,className);
+                    });
+                }
+            },
+
+            hasClass: function(className){
+                return this.some(function(elem){
+                    return InkCss.hasClassName(elem,className);
                 });
             },
 
+            setClass: function(className){
+                return this.removeClass().addClass(className);
+            },
+
             class: function(className){
-                if(className==undefined){
-                    return kink.getClassName(this.result(0));
+                if(className===undefined){
+                    var elem = this.get(0);
+                    return (elem && elem.hasOwnProperty('className')) ? elem.className : '';
                 }else{
-                    return this.each(function(elem){
-                        kink.setClassName(elem,className);
-                    });
+                    return this.setClass(className);
                 }
             }
     });
 
 
+    /**
+     * @extends KinkResult
+     * @uses  InkCSS
+     *
+     * CSS Styles
+     */
+   kink.result.extend({
+
+        style: function(inlineStyle){
+            if(inlineStyle instanceof String){
+                return this.each(function(elem){
+                    InkCss.setStyle(elem,inlineStyle);
+                });
+            }else if(inlineStyle===undefined){
+                return this.attr('style');
+            }else{
+                return this;
+            }
+        },
+
+        css: function(cssProp,value){
+            //preventing type errors
+            if(typeof this.get(0) !== "object" || !this.get(0).hasOwnProperty('style')){
+                return this;
+            }
+
+            if(cssProp instanceof String){
+                if(value===undefined){
+                    return InkCss.getStyle(this.get(0),cssProp);
+                }else{
+                    return this.each(function(elem){
+                        kink.extend(elem.style || {},{cssProp:value});
+                    });
+                }
+            }else if(cssProp instanceof Object){
+                return this.each(function(elem){
+                    kink.extend(elem.style || {},cssProp);
+                });
+            }
+        }
+    });
 
 
-    //window.kResult = kResult;
+
+
+
+
+
     window.kk = kink;
     return kink;
+
+    //end
+
 });
