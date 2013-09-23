@@ -186,7 +186,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @chainable
          */
         get: function(i) {
-            return (i!==undefined) ? this[parseInt(i,10)] : InkArray.convert(this);
+            if(i === undefined || typeof i !== 'number'){
+                return InkArray.convert(this);
+            }else{
+                i = parseInt(i,10);
+                return  this[(i<0) ? this.length+i : i];
+            }
         },
 
         /**
@@ -196,6 +201,15 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         result: function(i){
             return kink(this.get(i));
+        },
+
+        /**
+         * alias for the .result()
+         *
+         * @chainable
+         */
+        eq: function(i){
+            return this.result(i);
         },
 
         /**
