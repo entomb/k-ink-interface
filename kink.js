@@ -413,6 +413,49 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
 
+    /**
+     * @extends KinkResult
+     * @uses  Ink.Dom.Element
+     *
+     * Dom and element
+    */
+
+
+
+    kink.result.extend({
+        offset: function(){
+            var offset2 = InkElement.offset2(this.get(0));
+            return {
+                top:    offset2[1],
+                left:   offset2[0]
+            };
+        }
+
+    });
+
+     /*
+    absolutePosition
+    attribute
+    checked
+    data
+    hasAttribute
+    height
+    html
+    id
+    name
+    position
+    scroll
+    scrollTo
+    size
+    tag
+    value
+    width
+    */
+
+
+;
+
+
 
     /**
      * @extends KinkResult
@@ -625,8 +668,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         visible: function(){
             var elem = this.first();
             //@TODO:  add .offset() calls instead of this
-            return (elem.get(0).offsetHeight>0 &&
-                elem.get(0).offsetWidth>0 &&
+            return (elem.offset().left>0 &&
+                elem.offset().top>0 &&
                 elem.css('display')!=="none" &&
                 elem.css('visibility')!=="hidden" &&
                 elem.css('opacity')>0
