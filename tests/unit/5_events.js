@@ -4,7 +4,7 @@
  */
 /*
 module("events");
-test('bind() and alias', function(){
+test('.bind() and alias', function(){
       var fnEvent = sinon.spy();
 
       kk("#li2").click(fnEvent).click();

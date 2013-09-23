@@ -2,7 +2,7 @@
  * Testing resultset navigation
 */
 module("result navigation");
-test('get()', function(){
+test('.get()', function(){
 
   deepEqual(kk('ul').get(), [ul1,ul2], "all result");
 
@@ -17,7 +17,7 @@ test('get()', function(){
 });
 
 
-test('result()', function(){
+test('.result()', function(){
 
   equal(kk('ul').result(0).get(0), ul1, "get index 0");
 
@@ -30,7 +30,7 @@ test('result()', function(){
 });
 
 
-test('first()', function(){
+test('.first()', function(){
 
   equal(kk('ul').first().get(0), ul1, "return first element");
 
@@ -41,7 +41,7 @@ test('first()', function(){
 });
 
 
-test('last()', function(){
+test('.last()', function(){
 
   deepEqual(kk('ul').last().get(0), ul2, "return last element");
 
@@ -52,7 +52,7 @@ test('last()', function(){
 });
 
 
-test('length', function(){
+test('.length', function(){
 
   equal(kk('ul').length, 2, " counting all <ul> ");
 
@@ -63,7 +63,7 @@ test('length', function(){
 });
 
 
-test('next()', function(){
+test('.next()', function(){
 
   equal(kk('ul').next().length , 0, " single child ");
 
@@ -76,7 +76,7 @@ test('next()', function(){
 });
 
 
-test('prev()', function(){
+test('.prev()', function(){
 
   equal(kk('ul').prev().length, 0, " single child ");
 
@@ -89,7 +89,7 @@ test('prev()', function(){
 });
 
 
-test('siblings()', function(){
+test('.siblings()', function(){
   equal(kk('ul').siblings().length, 0, " single child ");
 
   equal(kk('#li1').siblings().length, 5, " correct number of childs ");
@@ -105,7 +105,7 @@ test('siblings()', function(){
 });
 
 
-test('parent()', function(){
+test('.parent()', function(){
   equal(kk(document).parent().length, 0, " no parent (document) ");
 
   var div = document.createElement('DIV');

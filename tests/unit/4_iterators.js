@@ -2,7 +2,7 @@
  * Testing iterators, one the most used functionalities (internaly).
  */
 module("iterators");
-test('each()', function(){
+test('.each()', function(){
 
   var each1 = 0;
   kk('#tester li').each(function(){
@@ -38,7 +38,7 @@ test('each()', function(){
 });
 
 /*
-test('filter()', function(){
+test('.filter()', function(){
 
   var filter1 = kk([1,2,3,4,5]).filter(function(item){
     return (item > 3);
@@ -60,7 +60,7 @@ test('filter()', function(){
 */
 
 
-test('some()', function(){
+test('.some()', function(){
 
   var some1 = kk.some([1,2,3,4,5], function(item){
     return (item==1);
@@ -85,7 +85,7 @@ test('some()', function(){
 });
 
 /*
-test('has()', function(){
+test('.has()', function(){
 
   ok(kk([1,2,3,4]).has(1), "[1,2,3,4] has 1 (true)");
 
@@ -102,7 +102,7 @@ test('has()', function(){
 });
 
 
-test('in()', function(){
+test('.in()', function(){
 
   ok(kk(1).in([1,2,3,4]), "is in [1,2,3,4]  (true)");
 

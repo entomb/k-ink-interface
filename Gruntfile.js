@@ -84,7 +84,8 @@ grunt.initConfig({
         }
       },
       gruntfile: {
-        src: 'Gruntfile.js'
+        src: 'Gruntfile.js',
+        inject: 'tests/runner.js'
       },
       lib_test: {
         src: ['lib/*.js', '!lib/_*.js', 'test/unit/*.js']
@@ -92,7 +93,12 @@ grunt.initConfig({
 
     },
     qunit: {
-      all: ['tests/index.html']
+      all: {
+        src:'tests/index.html',
+        options: {
+          inject: 'tests/bridge.js'
+        }
+      }
     }
 });
 

@@ -38,15 +38,7 @@
 
     page.onInitialized = function() {
         page.evaluate(addLogging);
-        /**
-         * Sets a nice output for QUnit (important when using phantomjs)
-         */
-        console.log("\n");
-        console.log("+-------------------------------------------+");
-        console.log("+       Running unit tests for k(Ink)       +")
-        console.log("+-------------------------------------------+");
-        console.log("   (✔/✖)     [module name] ");
-        console.log("---------------------------------------------");
+
     };
 
     page.onCallback = function(message) {
@@ -118,10 +110,13 @@
             });
 
             QUnit.testDone(function(r) {
+
                 currentTestAssertions.length = 0;
             });
 
             QUnit.done(function(result) {
+                console.log('Took ' + result.runtime +  'ms to run ' + result.total + ' tests. ' + result.passed + ' passed, ' + result.failed + ' failed.');
+
                 if (typeof window.callPhantom === 'function') {
                     window.callPhantom({
                         'name': 'QUnit.done',
