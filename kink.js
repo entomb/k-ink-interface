@@ -120,21 +120,52 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @param  {Object} paramObj
      * @return
      */
-    kink.extend = function(extendObj,paramObj){
+    kink.extend = function(extendObj,paramObj,cb){
+
+        //optional callback function
+        if(cb===undefined && paramObj instanceof Function){
+            cb = paramObj;
+            paramObj = undefined;
+        }
+
         if(paramObj===undefined){
+            if('result' in extendObj){ //protect kink.result
+                throw("Error extending kink: result is a reserved word");
+            }
+            if('extend' in extendObj){ //protect kink.extend and kink.result.extend
+                throw("Error extending kink: extend is a reserved word");
+            }
+
+            //extend {kink + extendObj}
             Ink.extendObj(kink,extendObj);
+
+            if(cb instanceof Function){
+                cb.call(this,this);
+            }
+            return this;
         }else{
-            return Ink.extendObj(extendObj,paramObj);
+            //extend {extendObj + paramObj}
+            Ink.extendObj(extendObj,paramObj);
+
+            if(cb instanceof Function){
+                cb.call(this,extendObj);
+            }
+
+            return extendObj;
         }
     };
+
 
 
     /**
      * Allows new methods to be gived to the kinkResult Object
      * @param  {Object} extendObj
      */
-    kink.result.extend = function(obj){
-        kink.extend(kink.result.prototype,obj);
+    kink.result.extend = function(extendObj,callback){
+        if('result' in extendObj){ //protect kink.extend and kink.result.extend
+            //throw("Error extending kink.result: extend is a reserved word");
+        }
+        kink.extend(kink.result.prototype,extendObj,callback);
     };
 
 
@@ -530,7 +561,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 if(value===undefined){
                     return InkCss.getStyle(this.get(0),cssProp);
                 }else{
-                    return this.style(cssProp+":"+value);
+                    return this.each(function(elem){
+                        InkCss.setStyle(elem,cssProp+":"+value);
+                    });
                 }
             }else if(cssProp instanceof Object){
                 return this.each(function(elem){
@@ -556,7 +589,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * shows an element
          *
-         * @uses  Ink.Dom.Css.hide
+         * @uses  Ink.Dom.Css.show
          * @chainable
          */
         show: function(){
@@ -568,7 +601,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * shows/hides an element depending on its state or the state param
          *
-         * @uses  Ink.Dom.Css.hide
+         * @uses  Ink.Dom.Css.toggle
+         * @uses  Ink.Dom.Css.showHide
          * @chainable
          */
         toggle: function(state){
@@ -581,6 +615,22 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                    InkCss.toggle(elem);
                 });
             }
+        },
+
+        /**
+         * checks if an element is visible
+         *
+         * @return {bool}
+         */
+        visible: function(){
+            var elem = this.first();
+            //@TODO:  add .offset() calls instead of this
+            return (elem.get(0).offsetHeight>0 &&
+                elem.get(0).offsetWidth>0 &&
+                elem.css('display')!=="none" &&
+                elem.css('visibility')!=="hidden" &&
+                elem.css('opacity')>0
+            );
         }
     });
 
