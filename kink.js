@@ -423,6 +423,31 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     kink.result.extend({
+
+        /**
+         * Setter and getter for attributes
+         *
+         * @chainable
+         */
+        attr: function(attr,value){
+            if(value !== undefined){
+                return this.each(function(elem){
+                    if(elem.setAttribute!==undefined){
+                        elem.setAttribute(attr,value);
+                    }
+                });
+            }else{
+                var elem = this.get(0);
+                if(elem!==undefined && elem.getAttribute!==undefined && Element.hasAttribute(elem,attr)){
+                    return elem.getAttribute(attr);
+                }else{
+                    return null;
+                }
+
+            }
+        },
+
+
         offset: function(){
             var offset2 = InkElement.offset2(this.get(0));
             return {
@@ -432,6 +457,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         }
 
     });
+
 
      /*
     absolutePosition
@@ -667,7 +693,6 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         visible: function(){
             var elem = this.first();
-            //@TODO:  add .offset() calls instead of this
             return (elem.offset().left>0 &&
                 elem.offset().top>0 &&
                 elem.css('display')!=="none" &&
