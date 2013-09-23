@@ -459,7 +459,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
              * @chainable
              */
             setClass: function(className){
-                return this.removeClass().addClass(className);
+                return this.removeClass().addClass(className.split(/\s+/));
             },
 
             /**
@@ -493,12 +493,21 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @chainable
          */
         style: function(inlineStyle){
-            if(inlineStyle instanceof String){
-                return this.each(function(elem){
-                    InkCss.setStyle(elem,inlineStyle);
-                });
-            }else if(inlineStyle===undefined){
-                return this.attr('style');
+            if(inlineStyle===undefined){
+                //return this.attr('style');
+
+                //temp while attr() is not ready
+                return this.get(0).getAttribute('style').trim();
+            }else if(typeof inlineStyle==="string"){
+                if(inlineStyle===""){
+                    return this.each(function(elem){
+                        elem.setAttribute('style','');
+                    });
+                }else{
+                    return this.each(function(elem){
+                        InkCss.setStyle(elem,inlineStyle);
+                    });
+                }
             }else{
                 return this;
             }
@@ -517,17 +526,59 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 return this;
             }
 
-            if(cssProp instanceof String){
+            if(typeof cssProp==="string"){
                 if(value===undefined){
                     return InkCss.getStyle(this.get(0),cssProp);
                 }else{
-                    return this.each(function(elem){
-                        kink.extend(elem.style || {},{cssProp:value});
-                    });
+                    return this.style(cssProp+":"+value);
                 }
             }else if(cssProp instanceof Object){
                 return this.each(function(elem){
                     kink.extend(elem.style || {},cssProp);
+                });
+            }else{
+                return this;
+            }
+        },
+
+        /**
+         * hides an element
+         *
+         * @uses  Ink.Dom.Css.hide
+         * @chainable
+         */
+        hide: function(){
+            return this.each(function(elem){
+               InkCss.hide(elem);
+            });
+        },
+
+        /**
+         * shows an element
+         *
+         * @uses  Ink.Dom.Css.hide
+         * @chainable
+         */
+        show: function(){
+            return this.each(function(elem){
+               InkCss.show(elem);
+            });
+        },
+
+        /**
+         * shows/hides an element depending on its state or the state param
+         *
+         * @uses  Ink.Dom.Css.hide
+         * @chainable
+         */
+        toggle: function(state){
+            if(state!==undefined){
+                return this.each(function(elem){
+                   InkCss.showHide(elem,!!state);
+                });
+            }else{
+                return this.each(function(elem){
+                   InkCss.toggle(elem);
                 });
             }
         }

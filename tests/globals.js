@@ -47,6 +47,8 @@ var check1 = document.getElementById('check1');
 var check2 = document.getElementById('check2');
 var textarea1 = document.getElementById('textarea1');
 
+var h1 = document.getElementById('title');
+
 var allLi1 = [li1,li2,li3,li4,li5,li6];
 var allLi2 = [li7,li8,li9,li10,li11];
 var allLi = [li1,li2,li3,li4,li5,li6,li7,li8,li9,li10,li11];
