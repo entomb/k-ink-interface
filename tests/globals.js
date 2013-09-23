@@ -53,3 +53,24 @@ var allLi1 = [li1,li2,li3,li4,li5,li6];
 var allLi2 = [li7,li8,li9,li10,li11];
 var allLi = [li1,li2,li3,li4,li5,li6,li7,li8,li9,li10,li11];
 var allA = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10];
+
+
+QUnit.testDone(function(r) {
+    if (typeof window.callPhantom === 'function') {
+        var sign = (r.failed==0) ? "✔" : '✖';
+        console.log(sign+" ("+r.passed+"/"+r.failed+") | "+ r.module +" > "+ r.name);
+    }
+});
+
+QUnit.done(function(result) {
+    if (typeof window.callPhantom === 'function') {
+        console.log("---------------------------------------------\n");
+        console.log('I just ran ' + result.total + ' tests. ' + result.passed + ' passed, ' + result.failed + ' failed.');
+
+        if(result.failed==0){
+            console.log("no errors, k(ink) is ready to go!\n")
+        }else{
+            console.log("k(ink) made a boo-boo... :(\n")
+        }
+    }
+});
