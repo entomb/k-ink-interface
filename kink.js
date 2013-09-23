@@ -447,6 +447,14 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         },
 
+        name: function(value){
+            return this.attr('name',value);
+        },
+
+        id: function(value){
+            return this.attr('id',value);
+        },
+
 
         offset: function(){
             var offset2 = InkElement.offset2(this.get(0));
@@ -461,21 +469,20 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
      /*
     absolutePosition
-    attribute
     checked
     data
     hasAttribute
+
     height
+    width
     html
-    id
-    name
+
     position
     scroll
     scrollTo
     size
     tag
     value
-    width
     */
 
 
