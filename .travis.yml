@@ -1,3 +1,3 @@
 language: javascript
-before_script: npm install
+before_script: npm install -g grunt-cli
 script: grunt tests
