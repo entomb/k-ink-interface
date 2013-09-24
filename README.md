@@ -1,4 +1,4 @@
-What is k(InK)
+What is k(InK) [![Build Status](https://travis-ci.org/entomb/k-ink-interface.png?branch=refactor-extendArrayObject)](https://travis-ci.org/entomb/k-ink-interface)
 ==============
 
 __k(Ink)__ is a kinky way to interact with the [ink.js library](https://github.com/sapo/ink.js) (currently used on all SAPO.pt projects and some OS as well) easing the pain of designers and developers alike when using the awesome [Ink css framework](http://ink.sapo.pt/).
