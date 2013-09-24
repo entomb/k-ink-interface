@@ -383,18 +383,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @for kink
          */
         each: function(arr,callback){
-            return InkArray.each( InkArray.convert(arr) ,callback);
-            /*
-
-                @NOTE InkArray has no way of passing a 'this' context
-
-                var array = InkArray.convert(input) || [];
-                for(var i; i<=array.length; i++){
-                    callback.call(array[i], array[i], i, array);
-                }
-                return this;
-
-            */
+            return InkArray.each( InkArray.convert(arr) ,function(element,index){
+                //@NOTE InkArray has no way of passing a 'this' context
+                callback.call(element,element,index,arr);
+            });
         },
 
         /**
@@ -402,7 +394,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @for kink
          */
         some: function(arr,callback){
-            return InkArray.some( InkArray.convert(arr) ,callback);
+            return InkArray.some( InkArray.convert(arr) ,function(element,index){
+                return callback.call(element,element,index,arr);
+            });
         }
 
     });
@@ -447,6 +441,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
     /**
      * @Class Element
+     *
      */
     kink.result.extend({
 
