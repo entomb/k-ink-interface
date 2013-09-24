@@ -1,11 +1,9 @@
 /**
  * @module Ink.Plugin.Kink_1
  * @author entomb ( https://github.com/entomb/k-ink-interface ) and ported by inkdev AT sapo.pt
- * @version 1
+ * @version 0.1.0-DEV
  *
  * @license http://opensource.org/licenses/MIT
-
-The MIT License (MIT)
 
 Copyright (c) 2013 Jonathan Tavares and other contributors
 
@@ -60,25 +58,34 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * @class Kink
-     *
-     * @constructor
-     * @param {mixed} param
-     * @param {mixed} context
-     * @private
-     */
+     * @class kink
+     * @module kink
+     * @main kink
+     * @param {mixed} param input parameter
+     * @param {mixed} [context] context parameter
+     * @return {kink.result} New kink.result object
+     * @static
+     * 
+	 **/
     var kink = function(param,context){
         return new kink.result(param,context);
     };
 
     /**
-     * @class kinkResult
+     * Kink Result Object, holds resultsets and methods
      *
+     * @main kResult
+     * @class kResult
+     * @uses Resultset
+     * @uses Array
+     * @uses Element
+     * @uses CSS
+     * @module kink
+     * @param {mixed} param input parameter
+     * @param {mixed} [context] context parameter
      * @constructor
-     * @param {mixed} param
-     * @param {mixed} context
-     * @private
-     */
+     * @return {kink.result} kink.result object
+    */
     kink.result = function(param,context){
         var rArray = [];
 
@@ -114,12 +121,17 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     //is this real life?
     kink.result.prototype = [];
 
+
     /**
-     * Allows new methods to be gived to the Kink Object or the extention of another object
-     * @param  {Object} extendObj
-     * @param  {Object} paramObj
-     * @return
-     */
+     * @method kink.extend()
+     * @for    kink
+     * @final
+     * @param  {Object}   extendObj the destination object or the object to extend `kink`
+     * @param  {Object}   [paramObj] the origin object
+     * @param  {Function} [cb] a callback function to be called after the merge
+     * @return  {Mixed}
+     * 
+	 **/
     kink.extend = function(extendObj,paramObj,cb){
 
         //optional callback function
@@ -158,9 +170,16 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * Allows new methods to be gived to the kinkResult Object
-     * @param  {Object} extendObj
-     */
+     *
+     * @method .extend()
+     * @for    kResult
+     * @final
+     * @param  {Object}   object to extend `kResult`
+     * @param  {Function} [cb] a callback function to be called after the merge
+     * @return {kResult}
+     * @chainable
+     * 
+	 **/
     kink.result.extend = function(extendObj,callback){
         if('result' in extendObj){ //protect kink.extend and kink.result.extend
             //throw("Error extending kink.result: extend is a reserved word");
@@ -173,17 +192,24 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
 
+
+
     /**
-     * @extends KinkResult
-     * Basic result navigation
-     *
+     * @module Resultset
+     * @for kResult
+     */
+
+    /**
+     * @Class Resultset
      */
     kink.result.extend({
 
         /**
-         * Gets all nodes or node[i] from a resultset
+         * Returns item in the position `i` or all if `i` is undefined
          *
-         * @chainable
+         * @method .get()
+         * @param  {int|undefined} [i=undefined] index position. suports negative indexes.
+         * @return {Mixed}  Returns the literal element for the position `i` or all of them
          */
         get: function(i) {
             if(i === undefined || typeof i !== 'number'){
@@ -195,45 +221,53 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * gets a new resultset with only node[i]
+         * Returns another `kResult` containing the item in the position `i` or all if `i` is undefined
          *
-         * @chainable
+         * @method .result()
+         * @param  {int|undefined} [i=undefined] index position. suports negative indexes.
+         * @return {kResult}
          */
         result: function(i){
             return kink(this.get(i));
         },
 
         /**
-         * alias for the .result()
+         * Alias for `.result()`, this is here for a more familiar syntax.
          *
-         * @chainable
+         * @method .eq()
+         * @param  {int|undefined} [i=undefined] index position. suports negative indexes.
+         * @return {kResult}
          */
         eq: function(i){
             return this.result(i);
         },
 
         /**
-         * gets a new resultset with only the last node
+         * Returns a resultset containing the last item.
          *
-         * @chainable
+         * @method .last()
+         * @return {kResult}
          */
         last: function() {
             return this.result(this.length-1);
         },
 
         /**
-         * gets a new resultset with only the first node
+         * Returns a resultset containing the first item.
          *
-         * @chainable
+         * @method .first()
+         * @return {kResult}
          */
         first: function() {
             return this.result(0);
         },
 
         /**
-         * finds elements inside each of the element on the result set.
+         * searches for elements using the `selector` param inside each of the current elements of the resultset
          *
-         * @chainable
+         * @method .find()
+         * @param {string} selector css selector to search for
+         * @return {kResult}
          */
         find: function(selector){
             var foundElements = [];
@@ -250,10 +284,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets the all the childs for each element in a result set.
-         *
-         * @uses Ink.Dom.Element.siblings
-         * @chainable
+         * @method .siblings()
          */
         siblings: function(){
             var foundElements = [];
@@ -273,10 +304,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets the next element for each element in a result set.
-         *
-         * @uses Ink.Dom.Element.nextElementSibling
-         * @chainable
+         * @method .next()
          */
         next: function(){
             var foundElements = [];
@@ -291,10 +319,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets the previous element for each element in a result set.
-         *
-         * @uses Ink.Dom.Element.previousElementSibling
-         * @chainable
+         * @method .prev()
          */
         prev: function(){
             var foundElements = [];
@@ -309,9 +334,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets the parent Nodes of a set of elements.
-         *
-         * @chainable
+         * @method .parent()
          */
         parent: function(){
             var foundParents = [];
@@ -326,9 +349,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets the childrenNodes of a set of elements.
-         *
-         * @chainable
+         * @method .childs()
          */
         childs: function(i){
             var foundElements = [];
@@ -353,18 +374,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
 
-    /**
-     * @extends Kink
-     * @uses  Ink.Util.Array
-     *
-     * Array iterators and filter methods
-     */
+
+
     kink.extend({
 
         /**
-         * Executes a callback fore element of an array
-         *
-         * @uses Ink.Util.Array.each
+         * @method kink.each()
+         * @for kink
          */
         each: function(arr,callback){
             return InkArray.each( InkArray.convert(arr) ,callback);
@@ -382,10 +398,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * Executes a callback for each element of an array and returns (bool) if any callback returned true
-         *
-         * @uses Ink.Util.Array.some
-         * @return {bool}
+         * @method kink.some()
+         * @for kink
          */
         some: function(arr,callback){
             return InkArray.some( InkArray.convert(arr) ,callback);
@@ -395,16 +409,17 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * @extends KinkResult
-     *
-     * Resultset iterators and filter methods
+     * @module Array
+     * @for kResult
+     */
+
+    /**
+     * @Class Array
      */
     kink.result.extend({
 
         /**
-         * Calls kink.each using the current resultset as a paramenter
-         *
-         * @chainable
+         * @method .each()
          */
         each: function(callback){
             kink.each(this,callback);
@@ -412,9 +427,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * Calls kink.some using the current resultset as a paramenter
-         *
-         * @return {bool}
+         * @method .some()
          */
         some: function(callback){
             return kink.some(this,callback);
@@ -428,19 +441,20 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
     /**
-     * @extends KinkResult
-     * @uses  Ink.Dom.Element
-     *
-     * Dom and element
-    */
-
+     * @module Element
+     * @for kResult
+     */
 
     /**
-     * checks all element for given attributes and returns true/false if any
-     *
-     * @returns {bool}
+     * @Class Element
      */
     kink.result.extend({
+
+
+        /**
+         * @method  .hasAttribute()
+         *
+         */
         hasAttribute: function(attr){
             return this.some(function(){
                 return InkElement.hasAttribute(attr);
@@ -448,9 +462,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * Setter and getter for attributes
+         * @method  .attr()
          *
-         * @chainable
          */
         attr: function(attr,value){
             if(value !== undefined){
@@ -469,15 +482,24 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
             }
         },
-
+        /**
+         * @method  .name()
+         *
+         */
         name: function(value){
             return this.attr('name',value);
         },
-
+        /**
+         * @method  .id()
+         *
+         */
         id: function(value){
             return this.attr('id',value);
         },
-
+        /**
+         * @method  .tag()
+         *
+         */
         tag: function(){
             var elem = this.get(0);
             if(elem!==undefined){
@@ -487,7 +509,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }
         },
 
-
+        /**
+         * @method  .offset()
+         *
+         */
         offset: function(){
             var offset2 = InkElement.offset2(this.get(0));
             return {
@@ -497,27 +522,24 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * returns the first element size
+         * @method  .size()
          *
-         * @uses  Ink.Dom.Element.elementDimensions
          */
         size: function(){
             return InkElement.elementDimensions(this.get(0));
         },
 
         /**
-         * returns the first element height
+         * @method  .height()
          *
-         * @uses  Ink.Dom.Element.elementHeight
          */
         height: function(){
             return InkElement.elementHeight(this.get(0));
         },
 
         /**
-         * returns the first element width
+         * @method  .width()
          *
-         * @uses  Ink.Dom.Element.elementWidth
          */
         width: function(){
             return InkElement.elementWidth(this.get(0));
@@ -526,18 +548,16 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * alias for the scroll function
+         * @method  .scroll()
          *
-         * @uses  Ink.Dom.Element.scroll
          */
         scroll: function(){
             return InkElement.scroll(this.get(0));
         },
 
         /**
-         * alias for the scrollTo function
+         * @method  .scrollTo()
          *
-         * @uses  Ink.Dom.Element.scrollTo
          */
         scrollTo: function(){
             return InkElement.scrollTo(this.get(0));
@@ -560,115 +580,101 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
 
+    /**
+     * @module CSS
+     * @for kResult
+     *
+     */
 
     /**
-     * @extends KinkResult
-     * @uses  Ink.Dom.Css
-     *
-     * CSS Class names
+     * @Class CSS
      */
     kink.result.extend({
 
-            /**
-             * removes classNames from elements in the resultset.
-             *
-             * @uses Ink.Dom.Css.removeClassName
-             * @chainable
-             */
-            removeClass: function(className){
-                if(className===undefined){
-                    return this.each(function(elem){
-                        if(elem && elem.hasOwnProperty('className')){
-                            elem.className = null;
-                        }
-                    });
-                }else if(className instanceof Array){
-                    return this.each(function(elem){
-                        kink.each(className,function(iclass){
-                            InkCss.removeClassName(elem,iclass);
-                        });
-                    });
-                }else{
-                    return this.each(function(elem){
-                        InkCss.removeClassName(elem,className);
-                    });
-                }
-            },
 
-
-            /**
-             * adds classNames to elements in the resultset.
-             *
-             * @uses Ink.Dom.Css.addClassName
-             * @chainable
-             */
-            addClass: function(className){
-                if(className===undefined){
-                    return this;
-                }else if(className instanceof Array){
-                    return this.each(function(elem){
-                        kink.each(className,function(iclass){
-                            InkCss.addClassName(elem,iclass);
-                        });
-                    });
-                }else{
-                    return this.each(function(elem){
-                        InkCss.addClassName(elem,className);
-                    });
-                }
-            },
-
-
-            /**
-             * checks if one or more elements has a given className
-             *
-             * @uses Ink.Dom.Css.hasClassName
-             * @chainable
-             */
-            hasClass: function(className){
-                return this.some(function(elem){
-                    return InkCss.hasClassName(elem,className);
+    /**
+     * @method  .removeClass()
+     * @param {String|Array|null} className className or array of classNames to remove
+     * 
+	 **/
+        removeClass: function(className){
+            if(className===undefined){
+                return this.each(function(elem){
+                    if(elem && elem.hasOwnProperty('className')){
+                        elem.className = null;
+                    }
                 });
-            },
-
-            /**
-             * replaces all className on all elements
-             *
-             * @chainable
-             */
-            setClass: function(className){
-                return this.removeClass().addClass(className.split(/\s+/));
-            },
-
-            /**
-             * gets or sets the className of all elements
-             *
-             * @chainable
-             */
-            class: function(className){
-                if(className===undefined){
-                    var elem = this.get(0);
-                    return (elem && elem.hasOwnProperty('className')) ? elem.className : '';
-                }else{
-                    return this.setClass(className);
-                }
+            }else if(className instanceof Array){
+                return this.each(function(elem){
+                    kink.each(className,function(iclass){
+                        InkCss.removeClassName(elem,iclass);
+                    });
+                });
+            }else{
+                return this.each(function(elem){
+                    InkCss.removeClassName(elem,className);
+                });
             }
-    });
+        },
 
 
     /**
-     * @extends KinkResult
-     * @uses  InkCSS
-     *
-     * CSS Styles
-     */
-   kink.result.extend({
+     * @method  .addClass()
+     * @param {String|Array} className className or array of classNames to add
+     * 
+	 **/
+        addClass: function(className){
+            if(className===undefined){
+                return this;
+            }else if(className instanceof Array){
+                return this.each(function(elem){
+                    kink.each(className,function(iclass){
+                        InkCss.addClassName(elem,iclass);
+                    });
+                });
+            }else{
+                return this.each(function(elem){
+                    InkCss.addClassName(elem,className);
+                });
+            }
+        },
+
 
         /**
-         * gets or sets the style attribute of an element
+         * @method  .hasClass()
          *
-         * @uses  Ink.Dom.Css.setStyle
-         * @chainable
+         */
+        hasClass: function(className){
+            return this.some(function(elem){
+                return InkCss.hasClassName(elem,className);
+            });
+        },
+
+        /**
+         * @method  .setClass()
+         *
+         */
+        setClass: function(className){
+            return this.removeClass().addClass(className.split(/\s+/));
+        },
+
+        /**
+         * @method  .class()
+         *
+         */
+        class: function(className){
+            if(className===undefined){
+                var elem = this.get(0);
+                return (elem && elem.hasOwnProperty('className')) ? elem.className : '';
+            }else{
+                return this.setClass(className);
+            }
+        },
+
+
+        /**
+         * @method  .style()
+         *
          */
         style: function(inlineStyle){
             if(inlineStyle===undefined){
@@ -693,10 +699,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * gets or sets css properties of elements in the resultset
+         * @method  .css()
          *
-         * @uses  Ink.Dom.Css.getStyle
-         * @chainable
          */
         css: function(cssProp,value){
             //preventing type errors
@@ -722,10 +726,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * hides an element
+         * @method  .hide()
          *
-         * @uses  Ink.Dom.Css.hide
-         * @chainable
          */
         hide: function(){
             return this.each(function(elem){
@@ -734,10 +736,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * shows an element
+         * @method  .show()
          *
-         * @uses  Ink.Dom.Css.show
-         * @chainable
          */
         show: function(){
             return this.each(function(elem){
@@ -746,11 +746,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * shows/hides an element depending on its state or the state param
+         * @method  .toggle()
          *
-         * @uses  Ink.Dom.Css.toggle
-         * @uses  Ink.Dom.Css.showHide
-         * @chainable
          */
         toggle: function(state){
             if(state!==undefined){
@@ -765,9 +762,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * checks if an element is visible
+         * @method  .visible()
          *
-         * @return {bool}
          */
         visible: function(){
             var elem = this.first();
@@ -781,12 +777,31 @@ Ink.createModule('Ink.Plugin.Kink',1,[
     });
 
 
+/**
+ * @module window
+ */
 
 
+    /**
+    * Kink main and global object
+
+    * @property kink
+    * @type {Class}
+    * @for window
+    * @global
+    */
+    window.kink = kink;
+
+    /**
+    * Shorthand for the Kink main and global object
+    * @property kk
+    * @type {Class}
+    * @for window
+    * @global
+    */
+    window.kk = kink;
 
 
-
-    window.kk = window.kink = kink;
     return kink;
 
     //end

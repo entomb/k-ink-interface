@@ -26,9 +26,7 @@ grunt.initConfig({
             onBuildWrite: function convert( name, path, contents ) {
                   grunt.log.writeln('cleaning up file '+name);
                   // Remove define wrappers, closure ends, and empty declarations
-                  contents = contents
-                    .replace( /define\([^{]*?{/, "" )
-                    .replace( /\}\);[^}\w]*$/, "" );
+                  contents = contents.replace( /define\([^{]*?{/, "" ).replace( /\}\);[^}\w]*$/, "" );
 
                   // Remove CommonJS-style require calls
                   // Keep an ending semicolon
@@ -38,12 +36,17 @@ grunt.initConfig({
                         return isVar && commaSemicolon === ";" ? ";" : "";
                       });
 
+
+                  // revome @description comments
+                  contents = contents.replace( /(@description)([\n\s\w\W\D\d][^\*]+)\*\*\//g,"\n\t **/");
+
                   // Remove empty definitions
-                  contents = contents
-                    .replace( /define\(\[[^\]]+\]\)[\W\n]+$/, "" );
+                  contents = contents.replace( /define\(\[[^\]]+\]\)[\W\n]+$/, "" );
+
 
                 return contents;
               }
+
           }
       }
     },
@@ -84,8 +87,7 @@ grunt.initConfig({
         }
       },
       gruntfile: {
-        src: 'Gruntfile.js',
-        inject: 'tests/runner.js'
+        src: 'Gruntfile.js'
       },
       lib_test: {
         src: ['lib/*.js', '!lib/_*.js', 'test/unit/*.js']
@@ -99,6 +101,10 @@ grunt.initConfig({
           inject: 'tests/bridge.js'
         }
       }
+    },
+    watch: {
+      files: ['lib/*.js'],
+      tasks: ['tests']
     }
 });
 
@@ -106,6 +112,7 @@ grunt.initConfig({
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   //task list
   grunt.registerTask('default', ['jshint','requirejs']);
