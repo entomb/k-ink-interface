@@ -95,7 +95,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             rArray = param;
 
         }else if(typeof param === 'string'){ //query selector
-            rArray = InkSelector.select(param, context);
+            try{
+                rArray = InkSelector.select(param, context);
+            }catch(e){
+                rArray = [];
+            }
         }else if(param instanceof Function){ //exec function
 
             return kink(param(context || kink));
@@ -371,7 +375,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @param {String} string
          * @return {String} string trimmed
          */
-        trim: InkString.trim,
+        trim: function(str){
+
+            str = (str==="" || str===undefined || str===null) ? "" : String(str);
+            return InkString.trim(str);
+        },
 
 
         /**
