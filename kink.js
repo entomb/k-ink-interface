@@ -787,7 +787,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @method .makeArray()
          * @for kResult
          */
-        makeArray: function(){
+        toArray: function(){
             return this.get();
         },
 
