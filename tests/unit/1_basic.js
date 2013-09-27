@@ -29,7 +29,7 @@ test( "loading kink", function() {
 
 });
 
-
+module('basic');
 test( "kResult factory", function() {
 
     equal( kk().length, 0, "kk() === kk([])" );
@@ -178,7 +178,7 @@ test("kink.isFunction()", function() {
 });
 
 
-test( "isNumeric", function() {
+test( "kink.isNumeric()", function() {
 
     var t = kk.isNumeric;
     var Traditionalists = function(n) {
@@ -232,20 +232,20 @@ test( "isNumeric", function() {
 });
 
 
-//test("isWindow", function() {
+test("kink.isWindow()", function() {
 
-    //ok( kk.isWindow(window), "window" );
-    //ok( kk.isWindow(document.getElementsByTagName("iframe")[0].contentWindow), "iframe.contentWindow" );
-    //ok( !kk.isWindow(), "empty" );
-    //ok( !kk.isWindow(null), "null" );
-    //ok( !kk.isWindow(undefined), "undefined" );
-    //ok( !kk.isWindow(document), "document" );
-    //ok( !kk.isWindow(document.documentElement), "documentElement" );
-    //ok( !kk.isWindow(""), "string" );
-    //ok( !kk.isWindow(1), "number" );
-    //ok( !kk.isWindow(true), "boolean" );
-    //ok( !kk.isWindow({}), "object" );
-    //ok( !kk.isWindow({ setInterval: function(){} }), "fake window" );
-    //ok( !kk.isWindow(/window/), "regexp" );
-    //ok( !kk.isWindow(function(){}), "function" );
-//});
+    ok( kk.isWindow(window), "window" );
+    ok( kk.isWindow(document.getElementsByTagName("iframe")[0].contentWindow), "iframe.contentWindow" );
+    ok( !kk.isWindow(), "empty" );
+    ok( !kk.isWindow(null), "null" );
+    ok( !kk.isWindow(undefined), "undefined" );
+    ok( !kk.isWindow(document), "document" );
+    ok( !kk.isWindow(document.documentElement), "documentElement" );
+    ok( !kk.isWindow(""), "string" );
+    ok( !kk.isWindow(1), "number" );
+    ok( !kk.isWindow(true), "boolean" );
+    ok( !kk.isWindow({}), "object" );
+    ok( !kk.isWindow({ setInterval: function(){} }), "fake window" );
+    ok( !kk.isWindow(/window/), "regexp" );
+    ok( !kk.isWindow(function(){}), "function" );
+});

@@ -61,6 +61,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @class kink
      * @module kink
      * @main kink
+     * @uses Array
+     * @uses Helper
      * @param {mixed} param input parameter
      * @param {mixed} [context] context parameter
      * @return {kink.result} New kink.result object
@@ -80,6 +82,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @uses Array
      * @uses Element
      * @uses CSS
+     * @uses Dom
      * @module kink
      * @param {mixed} param input parameter
      * @param {mixed} [context] context parameter
@@ -106,7 +109,6 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
         }else if(param instanceof kink.result){ //recursive much?
             return param;
-
         }else{ //fallback
             rArray = kink([param]);
         }
@@ -203,6 +205,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      */
 
 
+     /**
+      * Helper var with valid object types for .type()
+      * @private
+      */
+     var objectTypes = "object function array string number boolean date error regexp".split(" ");
 
 
     /**
@@ -248,34 +255,27 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
          */
-        type: function(target){
+        type: function(target,compare){
 
-            if(target===null){
-                return 'null';
-            }
-
-            if(target===undefined){
-                return 'undefined';
-            }
-
-            var objectTypes = "object function array string number boolean date error regexp".split(" ");
             var jsType = typeof target;
 
-            if(jsType==='object'){
+            if(target===null){
+                jsType = 'null';
+            }else if(target===undefined){
+                jsType = 'undefined';
+            }else if(jsType==='object'){
                 /* global toString */
                 var evalType = (toString.call(target)).replace(/\[object|\s|\]/ig,'').toLowerCase();
 
-                return (this.inArray(evalType,objectTypes)>0) ?  evalType : jsType;
-
-            }else{
-                return jsType;
+                jsType = (this.inArray(evalType,objectTypes)>0) ? evalType : jsType;
             }
+
+            return (compare===undefined) ? jsType : (jsType===compare);
         },
 
 
         /**
          * @method kink.now()
-         * @for kink
          * @return {int} unix timestamp
          */
         now: function(){
@@ -285,7 +285,6 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
         /**
          * @method kink.isJSON()
-         * @for kink
          * @return {bool}
          */
         isJSON: InkString.isJSON,
@@ -293,27 +292,24 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
         /**
          * @method kink.isFunction()
-         * @for kink
          * @return {bool}
          */
         isFunction: function(target) {
-            return (this.type(target)==="function");
+            return (this.type(target,"function"));
         },
 
 
         /**
          * @method kink.isWindow()
-         * @for kink
          * @return {bool}
          */
         isWindow: function(target) {
-            return (target===target.window);
+            return this.type(target,'object') ? (target===target.window) : false;
         },
 
 
         /**
          * @method kink.isNumeric()
-         * @for kink
          * @return {bool}
          */
         isNumeric: function(target) {
@@ -323,6 +319,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
         /**
          * checks if an object is empty
+         * @method kink.isEmptyObject()
          * @param  {array|object} the element to inspect
          * @return {bool}
          */
@@ -336,7 +333,16 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
+         * @method kink.isArray()
+         * @param  {mixed} the element to inspect
+         */
+        isArray: function(target){
+            return (this.type(target,"array"));
+        },
+
+        /**
          * Trows an error.
+         * @method kink.kink()
          * @param  {string} msg Error menssage
          * @return {void}
          */
@@ -347,11 +353,16 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
         /**
          * Turns a dashed string into a camelCase one
+         * @method kink.camelCase()
          * @param  {string} string some-dashed-string-like-this
          * @return {string} stringLikeThis
          */
-        camelCase: function( string ) {
-            return string.replace( /-([\da-z])/gi,function(all,letter) {
+        camelCase: function( target ) {
+            if(this.type(target,'string')){
+                return false;
+            }
+
+            return target.replace( /-([\da-z])/gi,function(all,letter) {
                                                     return letter.toUpperCase();
                                                 });
         },
@@ -360,7 +371,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * Truncates a string, breaking words and adding ... at the end
          *
-         * @method .truncateString()
+         * @method kink.truncateString()
          * @param {String} string
          * @param {Number} length - length limit for the string. String will be at most this big, ellipsis included.
          * @return {String} string truncated
@@ -371,12 +382,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * Remove spaces and new line from biggin and ends of string
          *
-         * @method trim
+         * @method kink.trim()
          * @param {String} string
          * @return {String} string trimmed
          */
         trim: function(str){
-
             str = (str==="" || str===undefined || str===null) ? "" : String(str);
             return InkString.trim(str);
         },
@@ -385,35 +395,54 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * Remove spaces and new line from biggin and ends of string
          *
-         * @method trim
+         * @method kink.stripTags()
          * @param {String} string
          * @return {String} string trimmed
          */
-        stripTags: InkString.stripTags,
+        stripTags: function(str){
+            if(!this.type(str,'string')){
+                return false;
+            }
+
+            return InkString.stripTags(str);
+        },
 
 
         /**
          * Convert listed characters to HTML entities
          *
-         * @method htmlEntitiesEncode
+         * @method kink.htmlEntitiesEncode()
          * @param {String} string
          * @return {String} string encoded
          */
-        htmlEntitiesencode: InkString.htmlEntitiesEncode,
+        htmlEntitiesencode: function(str){
+            if(!this.type(str,'string')){
+                return false;
+            }
+
+            return InkString.htmlEntitiesEncode(str);
+        },
 
 
         /**
          * Convert listed HTML entities to character
          *
-         * @method htmlEntitiesDecode
+         * @method kink.htmlEntitiesDecode()
          * @param {String} string
          * @return {String} string decoded
          */
-        htmlEntitiesDecode: InkString.htmlEntitiesDecode,
+        htmlEntitiesDecode: function(str){
+            if(!this.type(str,'string')){
+                return false;
+            }
+
+            return InkString.htmlEntitiesDecode(str);
+        },
 
 
         /**
          * Just an empty function
+         * @method kink.noop()
          * @return {void}
          */
         noop: function() {}
@@ -496,6 +525,31 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
+         * Iterates a resultset and executes a function for each element.
+         * @method .each()
+         */
+        each: function(callback){
+            kink.each(this,callback);
+            return this;
+        },
+
+        /**
+         * returns true if any of the elements match the callback.
+         * @method .some()
+         */
+        some: function(callback){
+            return kink.some(this,callback);
+        },
+
+        /**
+         * alias to kResult.get()
+         * @method .some()
+         */
+        toArray: function(){
+            return this.get();
+        },
+
+        /**
          * searches for elements using the `selector` param inside each of the current elements of the resultset
          *
          * @method .find()
@@ -503,16 +557,27 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          * @return {kResult}
          */
         find: function(selector){
+
+            if(selector instanceof kink.result){
+                var currentItems = this;
+                return selector.filter(function(i,selectorItem){
+                        return currentItems.some(function(k,currentItem){
+                            return InkElement.isAncestorOf(currentItem,selectorItem);
+                        });
+                    });
+            }
+
             var foundElements = [];
-            this.each(function(elem){
-                kink(selector,elem).each(function(childElem){
-                    if(!InkArray.inArray(childElem,foundElements)){
-                        foundElements.push(childElem);
-                    }
-                });
+            this.each(function(i,elem){
+                 kink(selector,elem).each(function(k,childElem){
+                     if(!InkArray.inArray(childElem,foundElements)){
+                         foundElements.push(childElem);
+                     }
+                 });
             });
 
             return kink(foundElements);
+
         },
 
 
@@ -521,10 +586,10 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         siblings: function(){
             var foundElements = [];
-            this.each(function(elem){
+            this.each(function(i,elem){
                 var elemFilter = InkElement.siblings(elem);
                 if(elemFilter){
-                    InkArray.each(elemFilter,function(elemSibling){
+                    kink.each(elemFilter,function(k,elemSibling){
                         if(!InkArray.inArray(elemSibling,foundElements)){
                             foundElements.push(elemSibling);
                         }
@@ -541,7 +606,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         next: function(){
             var foundElements = [];
-            this.each(function(elem){
+            this.each(function(i,elem){
                 var elemFilter = InkElement.nextElementSibling(elem);
                 if(elemFilter && !InkArray.inArray(elemFilter,foundElements)){
                     foundElements.push(elemFilter);
@@ -556,7 +621,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         prev: function(){
             var foundElements = [];
-            this.each(function(elem){
+            this.each(function(i,elem){
                 var elemFilter = InkElement.previousElementSibling(elem);
                 if(elemFilter && !InkArray.inArray(elemFilter,foundElements)){
                     foundElements.push(elemFilter);
@@ -571,8 +636,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         parent: function(){
             var foundParents = [];
-            this.each(function(elem){
-                if(elem.parentNode && !InkArray.inArray(elem.parentNode,foundParents)){
+            this.each(function(i,elem){
+                if(kink.type(elem,'object') && elem.parentNode && !InkArray.inArray(elem.parentNode,foundParents)){
                     foundParents.push(elem.parentNode);
                 }
             });
@@ -586,13 +651,15 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         childs: function(i){
             var foundElements = [];
-            this.each(function(elem){
-                var collection = InkArray.convert(elem.children);
-                kink(collection).each(function(childElem){
-                    if(childElem && !InkArray.inArray(childElem,foundElements)){
-                        foundElements.push(childElem);
-                    }
-                });
+            this.each(function(i,elem){
+                if(kink.type(elem,'object')){
+                    var collection = InkArray.convert(elem.children);
+                    kink(collection).each(function(k,childElem){
+                        if(childElem && !InkArray.inArray(childElem,foundElements)){
+                            foundElements.push(childElem);
+                        }
+                    });
+                }
             });
 
             if(typeof i !== 'number' && !i){
@@ -600,6 +667,34 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             }else{
                 return kink(foundElements).get(i);
             }
+        },
+
+        filter: function(option){
+            var globalSearch = [];
+            var foundElements = [];
+            var grepper = function(i,elem){
+                    return (InkArray.inArray(elem,globalSearch));
+                };
+
+            if(kink.type(option,'function')){
+                grepper = option;
+            }
+
+            if(kink.type(option,'string')){
+                //todo: optimize this with .is()
+                globalSearch = kink(option).get();
+            }
+
+            if(kink.type(option,'array')){
+                globalSearch = option;
+            }
+
+            if(option instanceof kink.result){
+                globalSearch = option.get();
+            }
+
+            foundElements = kink.grep(this.toArray(),grepper);
+            return kink(foundElements);
         }
 
     });
@@ -612,42 +707,38 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         /**
          * @method kink.each()
          * @for kink
+         * @param {Array} arr Array to iterate
+         * @param {Function}  callback function to execute for each item.
          */
         each: function(arr,callback){
             return InkArray.each( InkArray.convert(arr) ,function(element,index){
                 //@NOTE InkArray has no way of passing a 'this' context
-                callback.call(element,element,index,arr);
+                callback.call(element,index,element);
             });
         },
 
         /**
          * @method kink.some()
          * @for kink
+         * @param {Array} arr Array to iterate
+         * @param {Function}  callback function to execute for each item.
          */
         some: function(arr,callback){
             return InkArray.some( InkArray.convert(arr) ,function(element,index){
-                return callback.call(element,element,index,arr);
+                return callback.call(element,index,element);
             });
         },
 
         /**
-         * @method kink.filter()
+         * @method kink.map()
          * @for kink
-         */
-        filter: function(arr,callback) {
-            return arr.filter(function(element,index){
-                callback.call(element,element,index);
-            });
-        },
-
-        /**
-         * @method kink.filter()
-         * @for kink
+         * @param {Array} arr Array to iterate
+         * @param {Function}  callback function to execute for each item.
          */
         map: function(arr,callback) {
             var mapped = [];
-            this.each(arr,function(element,index){
-                var value = callback.call(element,element,index);
+            this.each(InkArray.convert(arr),function(element,index){
+                var value = callback.call(element,index,element);
                 if(value!==undefined && value!==null){
                     mapped.push(value);
                 }
@@ -656,48 +747,54 @@ Ink.createModule('Ink.Plugin.Kink',1,[
         },
 
         /**
-         * @method kink.filter()
+         * @method kink.grep()
          * @for kink
+         * @param {Array} arr Array to iterate
+         * @param {Function}  callback function to execute for each item.
          */
         grep: function(arr,callback) {
-            return this.map(arr,function(element,index){
-                var value = callback.call(element,element,index);
-                if(value){
-                    return element;
-                }else{
-                    return null;
-                }
+            return InkArray.convert(arr).filter(function(element,index){
+                return callback.call(element,index,element);
             });
         },
 
         /**
          * @method kink.makeArray()
          * @for kink
+         * @param (mixed) target Item to converto to array.
+         * @return {Array}
          */
         makeArray: function(target){
             return InkArray.convert(target);
         },
 
         /**
+         * returns the position of the item inside an array. -1 if not found.
+         *
          * @method kink.inArray()
          * @for kink
+         * @param {mixed} item needle
+         * @param {array} arr haystack
          */
-        inArray: function(element, arr) {
-            var i = this.keyValue(element,arr,true);
+        inArray: function(item, arr) {
+            var i = this.keyValue(item,arr,true);
             return (i!==false) ? i : -1; // -1 is here to replicate Array.indexOf
         },
 
-        keyValue: function(element,arr,stopAtFirst){
-            return InkArray.keyValue(element,arr,stopAtFirst);
+        /**
+         * returns the exact position of an item inside an array. false if not found. can return more then onde position if stopAtFirst is falase
+         *
+         * @method kink.keyValue()
+         * @for kink
+         * @param {mixed} item needle
+         * @param {array} arr haystack
+         * @param {bool} stopAtFirst return only one position, if false, will return an array of indexes
+         * @return {int|array} position of the needle in the haystack
+         */
+        keyValue: function(item,arr,stopAtFirst){
+            return InkArray.keyValue(item,arr,stopAtFirst);
         },
 
-        /**
-         * @method kink.isArray()
-         * @for kink
-         */
-        isArray: function(target){
-            return (this.type(target)==="array");
-        },
 
         /**
          * Merge two arrays and return the result
@@ -752,7 +849,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 return (kink.inArray(element,arr)===index);
             });
 
-        },
+        }
 
 
     });
@@ -763,53 +860,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
      * @for kResult
      */
 
-    /**
-     * @Class Array
-     */
-    kink.result.extend({
-
-        /**
-         * @method .each()
-         */
-        each: function(callback){
-            kink.each(this,callback);
-            return this;
-        },
-
-        /**
-         * @method .some()
-         */
-        some: function(callback){
-            return kink.some(this,callback);
-        },
-
-        /**
-         * @method .makeArray()
-         * @for kResult
-         */
-        toArray: function(){
-            return this.get();
-        },
-
-        /**
-         * @method .filter()
-
-        some: function(option){
-
-            if(option instanceof Function){
-
-            }else{
-                var filterElements = kink(option);
-                this.filter(function(){
-                });
-            }
-        }*/
-
-    });
 
 
-
-
+;
 
 
     /**
@@ -829,8 +882,8 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          *
          */
         hasAttribute: function(attr){
-            return this.some(function(){
-                return InkElement.hasAttribute(attr);
+            return this.some(function(i,elem){
+                return InkElement.hasAttribute(elem,attr);
             });
         },
 
@@ -840,7 +893,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         attr: function(attr,value){
             if(value !== undefined){
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                     if(elem.setAttribute!==undefined){
                         elem.setAttribute(attr,value);
                     }
@@ -972,19 +1025,19 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 	 **/
         removeClass: function(className){
             if(className===undefined){
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                     if(elem && elem.hasOwnProperty('className')){
                         elem.className = null;
                     }
                 });
             }else if(className instanceof Array){
-                return this.each(function(elem){
-                    kink.each(className,function(iclass){
+                return this.each(function(i,elem){
+                    kink.each(className,function(k,iclass){
                         InkCss.removeClassName(elem,iclass);
                     });
                 });
             }else{
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                     InkCss.removeClassName(elem,className);
                 });
             }
@@ -1000,13 +1053,13 @@ Ink.createModule('Ink.Plugin.Kink',1,[
             if(className===undefined){
                 return this;
             }else if(className instanceof Array){
-                return this.each(function(elem){
-                    kink.each(className,function(iclass){
+                return this.each(function(i,elem){
+                    kink.each(className,function(k,iclass){
                         InkCss.addClassName(elem,iclass);
                     });
                 });
             }else{
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                     InkCss.addClassName(elem,className);
                 });
             }
@@ -1018,7 +1071,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          *
          */
         hasClass: function(className){
-            return this.some(function(elem){
+            return this.some(function(i,elem){
                 return InkCss.hasClassName(elem,className);
             });
         },
@@ -1057,11 +1110,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 return this.get(0).getAttribute('style').trim();
             }else if(typeof inlineStyle==="string"){
                 if(inlineStyle===""){
-                    return this.each(function(elem){
+                    return this.each(function(i,elem){
                         elem.setAttribute('style','');
                     });
                 }else{
-                    return this.each(function(elem){
+                    return this.each(function(i,elem){
                         InkCss.setStyle(elem,inlineStyle);
                     });
                 }
@@ -1085,12 +1138,12 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 if(value===undefined){
                     return InkCss.getStyle(this.get(0),cssProp);
                 }else{
-                    return this.each(function(elem){
+                    return this.each(function(i,elem){
                         InkCss.setStyle(elem,cssProp+":"+value);
                     });
                 }
             }else if(cssProp instanceof Object){
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                     kink.extend(elem.style || {},cssProp);
                 });
             }else{
@@ -1103,7 +1156,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          *
          */
         hide: function(){
-            return this.each(function(elem){
+            return this.each(function(i,elem){
                InkCss.hide(elem);
             });
         },
@@ -1113,7 +1166,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          *
          */
         show: function(){
-            return this.each(function(elem){
+            return this.each(function(i,elem){
                InkCss.show(elem);
             });
         },
@@ -1124,11 +1177,11 @@ Ink.createModule('Ink.Plugin.Kink',1,[
          */
         toggle: function(state){
             if(state!==undefined){
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                    InkCss.showHide(elem,!!state);
                 });
             }else{
-                return this.each(function(elem){
+                return this.each(function(i,elem){
                    InkCss.toggle(elem);
                 });
             }

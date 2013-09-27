@@ -11,19 +11,19 @@ test('.each()', function(){
   equal(each1, kk('#tester li').length ,"  works with selectors");
 
   var each2 = 0;
-  kk.each([1,2,3,4,5], function(item){
-    each2+=item;
+  kk.each([1,2,3,4,5], function(){
+    each2+=this;
   });
   equal(each2, 15 ," works with arrays (from kink)");
 
   var each3 = 0;
-  kk([1,2,3,4,5]).each(function(item){
-    each3+=item;
+  kk([1,2,3,4,5]).each(function(){
+    each3+=this;
   });
   equal(each3, 15 ," works with arrays (from resultset)");
 
   var each4 = 0;
-  kk(1).each(function(item){
+  kk(1).each(function(){
     each4++;
   });
   equal(each4, 1 ," works with single item");
@@ -62,22 +62,22 @@ test('.filter()', function(){
 
 test('.some()', function(){
 
-  var some1 = kk.some([1,2,3,4,5], function(item){
+  var some1 = kk.some([1,2,3,4,5], function(i,item){
     return (item==1);
   });
   ok(some1, " from a source array (true)");
 
-  var some2 = kk.some([1,2,3,4,5], function(item){
+  var some2 = kk.some([1,2,3,4,5], function(i,item){
     return (item==99);
   });
   ok(!some2, " from a source array (false)");
 
-  var some3 = kk("ul li").some(function(item){
+  var some3 = kk("ul li").some(function(i,item){
     return (item.className=="first");
   });
   ok(some3, " filtering a resultset (true)");
 
-  var some4 = kk("ul li").some(function(item){
+  var some4 = kk("ul li").some(function(i,item){
     return (item.className=="nothere");
   });
   ok(!some4, " filtering a resultset (false)");
@@ -119,3 +119,4 @@ test('.in()', function(){
 
 });
 */
+
