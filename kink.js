@@ -647,9 +647,9 @@ Ink.createModule('Ink.Plugin.Kink',1,[
 
 
         /**
-         * @method .childs()
+         * @method .children()
          */
-        childs: function(i){
+        children: function(){
             var foundElements = [];
             this.each(function(i,elem){
                 if(kink.type(elem,'object')){
@@ -662,11 +662,7 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                 }
             });
 
-            if(typeof i !== 'number' && !i){
-                return kink(foundElements);
-            }else{
-                return kink(foundElements).get(i);
-            }
+            return kink(foundElements);
         },
 
         filter: function(option){
@@ -1033,7 +1029,23 @@ Ink.createModule('Ink.Plugin.Kink',1,[
                     elem.remove();
                 });
             }
+        },
+
+        /**
+         * will move all items in the resultset to the a new parent. if the selector is a string, will append to first result
+         *
+         * @method .appendTo
+         * @param  {string} selector selector for the new parent
+         * @return {kResult}
+         * @chainable
+         */
+        appendTo: function(selector){
+            var newParent = kink(selector).get(0);
+            return this.each(function(i,elem){
+                newParent.appendChild(elem);
+            });
         }
+
 
 
     });
